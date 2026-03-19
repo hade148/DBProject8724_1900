@@ -46,4 +46,4 @@ volumes:
 
 
 networks:
-  zoo_network:
+  AttraTicket_network:
