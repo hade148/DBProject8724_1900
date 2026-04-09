@@ -1,0 +1,501 @@
+review_id,customer_id,attradtion_id,rating,comment,review_date
+1,1,1,10,Lightweight and portable picnic table for outdoor use.,7/25/2025
+2,2,2,12,Complete tattoo kit for beginners and professionals.,1/1/2026
+3,3,3,18,Compact ice maker for creating ice at home or in offices.,6/25/2025
+4,4,4,87,Spicy sauce perfect for chicken wings and dipping.,7/4/2025
+5,5,5,70,High-quality sketchbook for artists.,10/30/2025
+6,6,6,86,Electric kettle that offers precise temperature settings.,12/30/2025
+7,7,7,85,Effective roller for removing pet hair from furniture.,9/11/2025
+8,8,8,37,"Sweet and fruity peach preserves, perfect for spreading on toast.",9/27/2025
+9,9,9,98,Lightweight and portable chair for camping or events.,10/19/2025
+10,10,10,74,Crunchy corn chips flavored with chili and lime for a zesty kick.,1/2/2026
+11,11,11,98,Quick-cooking ramen for instant meals.,1/27/2026
+12,12,12,56,Savory soup made with leeks and potatoes.,7/26/2025
+13,13,13,9,"A complete meal kit containing breaded chicken breast, marinara sauce, and pasta, perfect for a quick dinner.",2/24/2026
+14,14,14,30,DIY projector that magnifies your smartphone screen for movie nights.,9/13/2025
+15,15,15,34,Durable toy designed for heavy chewers.,1/19/2026
+16,16,16,3,Modern lamp featuring a USB port for convenient charging.,6/10/2025
+17,17,17,8,A feminine wrap top with a beautiful floral print.,9/16/2025
+18,18,18,22,Spreadable cream cheese with garlic and herbs.,9/8/2025
+19,19,19,36,"Organize travel documents, passport, and cards.",11/19/2025
+20,20,20,53,Mild cheese great for sandwiches.,1/24/2026
+21,21,21,4,Stainless steel travel mug with spill-proof lid.,5/28/2025
+22,22,22,43,"Rich tomato soup flavored with fresh basil, ready to heat up.",12/24/2025
+23,23,23,11,"Creamy yogurt made with coconut and cashews, dairy-free.",11/21/2025
+24,24,24,15,Silicone oven mitts designed for safe cooking and baking.,9/9/2025
+25,25,25,68,Soft and chewy bar packed with protein and cinnamon flavors.,9/4/2025
+26,26,26,67,Warm oatmeal flavored with apple and cinnamon.,6/3/2025
+27,27,27,1,Flexible LED lights for creative home lighting designs.,3/13/2026
+28,28,28,59,Roasted almonds coated in a sweet maple and cinnamon mixture.,8/30/2025
+29,29,29,78,Eco-friendly bags for picking up after your pet.,5/16/2025
+30,30,30,92,Stability ball for Pilates and yoga workouts.,9/17/2025
+31,31,31,19,Bright safety vest for outdoor visibility during any activity.,5/20/2025
+32,32,32,75,"Gluten-free almond flour, perfect for baking.",11/29/2025
+33,33,33,81,Spacious duffle bag for weekend getaways.,4/29/2025
+34,34,34,68,Everything you need for maintaining a healthy beard.,6/16/2025
+35,35,35,51,A hearty vegetable curry for a quick and satisfying meal.,8/14/2025
+36,36,36,52,Compact digital camera with 20MP resolution.,11/10/2025
+37,37,37,37,Sharp tailored blazer perfect for office wear and professional events.,3/11/2026
+38,38,38,64,Compact organizer for cosmetics during travel.,10/18/2025
+39,39,39,62,"Crunchy and nutritious almonds, perfect for snacking.",4/24/2025
+40,40,40,16,Durable speaker designed for outdoor use with water resistance.,11/18/2025
+41,41,41,26,Space-saving shoe organizer for tight spaces.,1/29/2026
+42,42,42,30,A rich curry paste for making authentic Thai green curry at home.,9/19/2025
+43,43,43,44,"Easy-to-prepare rice with cilantro and lime flavors, great as a side.",8/5/2025
+44,44,44,48,Comfortable and adjustable harness for dogs.,4/25/2025
+45,45,45,3,"Delicious pretzel bites with a sweet honey mustard flavor, perfect for dipping.",9/8/2025
+46,46,46,53,Plant-based sausage links with spices and herbs.,10/20/2025
+47,47,47,38,"A healthy oil extracted from avocados, ideal for frying and salads.",5/3/2025
+48,48,48,43,Rich and flavorful tomato sauce for pasta or pizza.,4/28/2025
+49,49,49,97,Classic wooden train set for imaginative play.,4/4/2025
+50,50,50,34,Natural energy bites packed with fruits and nuts for a perfect snack.,1/15/2026
+51,51,51,21,Light and crunchy rice cakes made from organic brown rice.,8/17/2025
+52,52,52,3,"Fresh artisan bread, perfect for sandwiches",6/6/2025
+53,53,53,81,Sharp tailored blazer perfect for office wear and professional events.,7/3/2025
+54,54,54,40,Timeless analog watch with a leather strap.,3/30/2025
+55,55,55,38,"Gluten-free pasta made from lentils, high in protein.",10/13/2025
+56,56,56,37,Healthier way to make popcorn in the microwave without oil.,11/8/2025
+57,57,57,11,"Chopped and frozen spinach, ideal for cooking and smoothies.",11/7/2025
+58,58,58,97,Electric indoor grill for quick meals.,4/26/2025
+59,59,59,63,"A creamy spread made with chocolate and hazelnuts, perfect for toast.",2/1/2026
+60,60,60,12,Multi-functional tool for emergency situations in the car.,7/24/2025
+61,61,61,79,"A variety pack of classic, roasted red pepper, and garlic hummus.",1/27/2026
+62,62,62,28,Seat belt attachment to keep dogs safe during car rides.,9/16/2025
+63,63,63,27,Set of ceramic knives for precision slicing.,10/31/2025
+64,64,64,43,HD streaming device for accessing popular services.,7/3/2025
+65,65,65,53,Magical lens kit for kids to explore the outdoors.,2/21/2026
+66,66,66,74,Compact charcoal grill perfect for tailgating.,7/1/2025
+67,67,67,27,Quick and easy fried rice mixed with vegetables and soy sauce.,5/1/2025
+68,68,68,16,Suction cup bird feeder for close-up bird watching.,4/9/2025
+69,69,69,49,Windshield sunshade for car interior protection.,11/16/2025
+70,70,70,6,Waterproof cover to protect car seats from pet hair and dirt.,6/11/2025
+71,71,71,61,"Crispy sweet potato fries, perfectly seasoned and baked to perfection.",6/12/2025
+72,72,72,59,"Protein-rich quinoa, a great alternative to rice.",9/13/2025
+73,73,73,84,Compact laundry bag for travel use.,9/21/2025
+74,74,74,78,Effective laundry detergent for a deep clean.,12/20/2025
+75,75,75,62,Eco-friendly bamboo holder for toothbrushes.,11/8/2025
+76,76,76,21,Set of unique wooden coasters for drinks and decor.,6/14/2025
+77,77,77,74,Elegant tea set that includes an infuser for brewing.,10/22/2025
+78,78,78,90,Delicious mini donuts dusted with cinnamon sugar.,2/2/2026
+79,79,79,95,Instant oatmeal flavored with cranberries and orange zest for breakfast.,10/26/2025
+80,80,80,5,Fast and accurate thermometer for grilling and cooking.,8/6/2025
+81,81,81,35,Durable and non-stick ceramic cookware for healthy cooking.,10/16/2025
+82,82,82,13,"Quick oatmeal cups with banana and nut flavor, great for breakfast.",6/15/2025
+83,83,83,63,Fluffy biscuits made without gluten,4/7/2025
+84,84,84,6,Nostalgic clock that adds charm to any room.,8/16/2025
+85,85,85,23,Marinated grilled chicken breasts seasoned with garlic and herbs.,3/8/2026
+86,86,86,3,A flavorful barbecue sauce with a sweet and spicy kick.,6/22/2025
+87,87,87,71,Stackable containers for organizing snacks and treats.,8/12/2025
+88,88,88,66,Versatile folding table great for events or outdoor activities.,5/30/2025
+89,89,89,89,A timeless wardrobe staple crafted from soft cotton with a perfect fit.,10/10/2025
+90,90,90,38,"Sweet and tart dried cranberries, great for salads and baking.",6/26/2025
+91,91,91,98,Delicious clusters of peanuts and chocolate for a sweet treat.,3/1/2026
+92,92,92,9,"Nutty flavored chia seeds, packed with nutrients.",3/26/2026
+93,93,93,45,Non-slip yoga mat for optimal grip and comfort.,4/20/2025
+94,94,94,38,Compact coffee grinder for fresh ground coffee beans.,12/6/2025
+95,95,95,45,Modern lamp featuring a USB port for convenient charging.,5/19/2025
+96,96,96,78,Automatically cooks eggs to your desired level.,4/7/2025
+97,97,97,63,Planter with self-watering feature for easy plant care.,1/5/2026
+98,98,98,78,Automatically cooks eggs to your desired level.,2/14/2026
+99,99,99,77,"Versatile holder that can be used on desks, cars, and more.",5/21/2025
+100,100,100,53,"Frozen stir-fry mix with chicken, veggies, and teriyaki sauce.",4/5/2025
+101,101,101,36,Small fridge designed to keep skincare products cool and fresh.,10/18/2025
+102,102,102,38,Crispy and sweet dried apple slices,7/3/2025
+103,103,103,83,Wide pasta sheets for making lasagna.,10/11/2025
+104,104,104,44,Spicy chili sauce for an extra kick in your meals.,8/17/2025
+105,105,105,7,Tangy and crunchy dill pickles.,11/27/2025
+106,106,106,54,Refreshing sparkling water infused with cranberry and lime flavors.,3/5/2026
+107,107,107,57,Travel-friendly water bottle for pets on the go.,4/23/2025
+108,108,108,54,Space-saving broom holder for organized cleaning supplies.,7/15/2025
+109,109,109,84,Savory soup made with leeks and potatoes.,8/14/2025
+110,110,110,69,Savory soup made with leeks and potatoes.,7/31/2025
+111,111,111,45,Non-slip yoga mat for optimal grip and comfort.,2/6/2026
+112,112,112,43,Indoor gardening kit with herbs and pots.,12/18/2025
+113,113,113,18,Everything you need to bake delicious chocolate chip cookies.,8/17/2025
+114,114,114,40,Windshield sunshade for car interior protection.,9/7/2025
+115,115,115,38,Eco-friendly bamboo toothbrush for sustainable living.,7/27/2025
+116,116,116,64,Wireless earbuds designed for immersive sound experience.,10/26/2025
+117,117,117,94,Rich chocolate syrup for ice cream or beverages.,3/23/2026
+118,118,118,78,Rich vegetable stock for cooking soups and stews.,1/27/2026
+119,119,119,14,Durable baking sheet coated for easy food release.,1/21/2026
+120,120,120,96,"Fine semolina flour, perfect for pasta and desserts.",4/7/2025
+121,121,121,48,Compact food processor for quick meal prep.,8/27/2025
+122,122,122,55,"Tender and juicy pork chops, perfect on the grill.",12/15/2025
+123,123,123,95,"Classic marinara sauce for pasta, pizza, or dipping.",7/8/2025
+124,124,124,5,"Eye-catching mini dress with sequins, ideal for party nights out.",10/7/2025
+125,125,125,9,Juicy raisins coated in rich dark chocolate.,5/7/2025
+126,126,126,36,Eco-friendly yoga mat made from sustainable materials.,3/22/2026
+127,127,127,26,Versatile canvas sneakers suitable for everyday wear with a comfortable fit.,9/12/2025
+128,128,128,54,Automatically cooks eggs to your desired level.,5/31/2025
+129,129,129,52,Lightweight and portable paddle board for water sports.,1/4/2026
+130,130,130,32,Variety of bands suitable for all fitness levels.,12/17/2025
+131,131,131,50,"Fresh salsa made with tomatoes, onions, and cilantro.",9/28/2025
+132,132,132,56,Premium potting soil for indoor plants.,8/30/2025
+133,133,133,63,"Fresh salsa made with tomatoes, onions, and cilantro.",7/25/2025
+134,134,134,35,Jump rope that counts your jumps for tracking workouts.,3/10/2026
+135,135,135,89,Space-saving adjustable dumbbells for strength training.,2/11/2026
+136,136,136,81,Foldable chair equipped with a cooler pouch.,11/8/2025
+137,137,137,88,"A hearty salad with grains, dried fruits, and nuts.",2/20/2026
+138,138,138,73,Essential tools for bike maintenance and repair.,6/25/2025
+139,139,139,50,Stay dry with these stylish waterproof rain boots.,4/20/2025
+140,140,140,25,Removable wall art stickers for home decoration.,10/10/2025
+141,141,141,32,Water bottle designed to infuse flavors from fruits.,1/6/2026
+142,142,142,21,Eco-friendly cutting board that is safe for dishwashers.,3/25/2026
+143,143,143,4,Pancake mix infused with seasonal pumpkin spice flavor.,2/9/2026
+144,144,144,66,Quick-boiling kettle for home and office use.,11/8/2025
+145,145,145,43,Fun tourist magnets from around the world for your fridge.,5/8/2025
+146,146,146,93,"Colorful veggie chips made from beets, carrots, and sweet potatoes.",5/1/2025
+147,147,147,63,"Refreshing and tangy fermented tea, available in various flavors.",5/27/2025
+148,148,148,88,Smart speaker with Alexa and music streaming features.,12/23/2025
+149,149,149,61,"A natural sweetener made from coconut sap, a healthier alternative to sugar.",1/4/2026
+150,150,150,50,Savory potato chips with a hint of maple sweetness and crispy bacon flavor.,4/10/2025
+151,151,151,33,Easy-to-set-up picnic table for outdoor dining.,8/18/2025
+152,152,152,87,Custom keychain with engraved text.,4/25/2025
+153,153,153,79,"Nutrient-rich broccoli, easy to add to any meal.",10/23/2025
+154,154,154,20,Noodles tossed in a spicy Thai peanut sauce.,10/7/2025
+155,155,155,46,Roasted almonds coated in a sweet maple and cinnamon mixture.,1/17/2026
+156,156,156,65,A blend of herbs and garlic for seasoning meats and vegetables.,9/28/2025
+157,157,157,2,500-piece jigsaw puzzle featuring beautiful scenery.,7/15/2025
+158,158,158,75,Complete watercolor set with paints and brushes.,12/18/2025
+159,159,159,81,Shower head designed for a strong spray and complete coverage.,9/25/2025
+160,160,160,72,"Sweet and salty kettle corn, perfect for snacking.",3/12/2026
+161,161,161,34,"All-in-one mix for easy homemade cheeseburgers, just add ground beef.",3/6/2026
+162,162,162,28,Compact scooper for easy waste clean-up during walks.,11/18/2025
+163,163,163,71,"A delicious creamy dip featuring spinach and artichokes, perfect for parties.",8/21/2025
+164,164,164,47,Eco-friendly string lights for outdoor decor.,12/18/2025
+165,165,165,2,Beginner-friendly drone with HD camera.,9/20/2025
+166,166,166,92,Bluetooth scale that tracks body composition through an app.,5/5/2025
+167,167,167,10,Hearty chili made with premium ground beef and kidney beans.,4/21/2025
+168,168,168,65,Blender designed for smoothies and shakes on the go.,12/2/2025
+169,169,169,33,Non-stick surface for easy cooking and cleaning.,4/6/2025
+170,170,170,56,Nutritious bars packed with protein for energy,6/6/2025
+171,171,171,56,Water-resistant Bluetooth speaker for showers.,5/11/2025
+172,172,172,90,Smart speaker with Alexa and music streaming features.,7/12/2025
+173,173,173,91,Electric indoor grill for quick meals.,8/10/2025
+174,174,174,75,"Tender jackfruit cooked in BBQ sauce, a delicious plant-based alternative.",9/5/2025
+175,175,175,48,Tender beef chunks for slow-cooked stews.,3/7/2026
+176,176,176,91,Creative building set for kids to spark imagination.,10/9/2025
+177,177,177,26,Bell peppers stuffed with rice and vegetables,9/25/2025
+178,178,178,7,"Soft and fluffy whole wheat pita bread, great for wraps.",9/30/2025
+179,179,179,5,A light and breezy top ideal for warm days.,11/21/2025
+180,180,180,13,"Fresh Brussels sprouts, great for roasting or steaming.",8/17/2025
+181,181,181,56,"Thin, flat pasta perfect for various sauces.",6/9/2025
+182,182,182,23,Ready-to-eat chicken bowl with teriyaki sauce and rice.,8/20/2025
+183,183,183,45,Set of whisks in various sizes for cooking.,10/17/2025
+184,184,184,86,"Soft flannel shirt with a timeless plaid pattern, perfect for layering.",4/7/2025
+185,185,185,9,"Flavored couscous with herbs and spices, perfect as a side dish or a base for salads.",1/7/2026
+186,186,186,70,Spicy ginger cookies that are crunchy and delicious.,9/11/2025
+187,187,187,72,"Crispy baked radish chips, a healthy snack alternative.",5/9/2025
+188,188,188,17,Durable tablet designed for kids with parental controls.,1/21/2026
+189,189,189,12,"Blend of cheddar and mozzarella cheese, great for recipes.",4/8/2025
+190,190,190,60,"Creamy ranch dressing, perfect for salads and dips.",10/30/2025
+191,191,191,38,Complete kit to make your own flavored lip balms at home.,6/10/2025
+192,192,192,12,"A hearty soup filled with vegetables and herbs, perfect for a light meal.",10/24/2025
+193,193,193,98,Multi-functional tool for emergency situations in the car.,4/11/2025
+194,194,194,63,Battery-operated blender for smoothies on the go.,10/21/2025
+195,195,195,33,Monitor and interact with your pet remotely with this camera.,6/29/2025
+196,196,196,8,Heated stool cover for extra comfort during winter.,6/24/2025
+197,197,197,1,Smooth Greek yogurt infused with vanilla bean flavor.,3/26/2026
+198,198,198,77,A creamy and flavorful hummus made with roasted red peppers.,8/24/2025
+199,199,199,81,Sweet and tangy honey mustard dip for snacks.,2/22/2026
+200,200,200,68,Compact pocket tool with various built-in functions.,9/20/2025
+201,201,201,6,Customizable window cover for light control and privacy.,3/14/2026
+202,202,202,90,Soft silicone earbud covers for comfort and fit.,12/8/2025
+203,203,203,38,A creamy and flavorful hummus made with roasted red peppers.,11/17/2025
+204,204,204,77,"A sweet and spicy sauce, great for dipping or cooking.",10/19/2025
+205,205,205,6,Eco-friendly coffee filter for brewing.,1/14/2026
+206,206,206,89,"Salmon fillets seasoned with lemon and dill, perfect for grilling.",4/11/2025
+207,207,207,93,Brews coffee with a smooth flavor without bitterness.,7/9/2025
+208,208,208,9,Stylish holder for organizing cooking utensils.,5/23/2025
+209,209,209,60,"Frozen stir-fry mix with chicken, veggies, and teriyaki sauce.",2/15/2026
+210,210,210,76,"Nutty flavored chia seeds, packed with nutrients.",6/28/2025
+211,211,211,10,Foldable table for working with laptops anywhere.,1/1/2026
+212,212,212,26,Lightweight fishing rod suitable for beginners.,2/1/2026
+213,213,213,1,Wearable device to track fitness activities and heart rate.,5/5/2025
+214,214,214,44,Strategic board game for family game nights.,6/30/2025
+215,215,215,95,"A mix of strawberries, blueberries, and raspberries, perfect for smoothies.",8/13/2025
+216,216,216,70,Spicy cornbread infused with jalapeños for a kick of flavor at your next meal.,4/13/2025
+217,217,217,94,"Durable canvas tote bag, perfect for everyday use.",2/4/2026
+218,218,218,72,Compact coffee grinder for fresh ground coffee beans.,10/28/2025
+219,219,219,48,Compact yoga mat that folds for easy storage and transport.,9/1/2025
+220,220,220,90,"Savory oatmeal ready to eat, great for breakfast or a snack.",5/30/2025
+221,221,221,45,Double-sided art easel for painting and drawing.,9/5/2025
+222,222,222,27,Warm oatmeal flavored with apple and cinnamon.,9/29/2025
+223,223,223,100,Crunchy and flavorful mix of oats and honey.,6/20/2025
+224,224,224,31,Comprehensive tool set for gardening enthusiasts.,1/20/2026
+225,225,225,20,"Canned beans with chili sauce, perfect for chili dishes.",3/15/2026
+226,226,226,57,"Sustainable tank top made of bamboo cotton, offering breathability and comfort.",10/5/2025
+227,227,227,58,Lightweight and portable paddle board for water sports.,3/27/2026
+228,228,228,83,Special attachment for vacuum cleaners to remove pet hair easily.,6/22/2025
+229,229,229,79,Everyday flats that combine comfort and style.,5/15/2025
+230,230,230,35,Tool for measuring perfect pasta portions every time.,9/9/2025
+231,231,231,1,"Synthetic crab meat sticks, great for salads and sushi.",11/19/2025
+232,232,232,40,Nutty granola bars for healthy snacking.,6/27/2025
+233,233,233,85,"Tangy dressing perfect for salads and marinades, with sesame and ginger flavors.",8/14/2025
+234,234,234,78,Passive noise reduction headphones for focus.,3/22/2026
+235,235,235,59,"Nutritious protein bar with cherry and almond flavor, great for on-the-go.",7/23/2025
+236,236,236,3,Comfortable harness designed to keep pets safe in the car.,8/18/2025
+237,237,237,23,Sleek and protective sleeve for laptops and tablets.,7/24/2025
+238,238,238,77,A meal kit featuring tender chicken with honey sesame sauce.,8/9/2025
+239,239,239,82,Frozen vegetable primavera for quick meals.,4/9/2025
+240,240,240,53,Timeless belted trench coat for a polished look during fall.,8/29/2025
+241,241,241,64,Organized tackle box for fishing gear.,3/29/2026
+242,242,242,72,Eco-friendly charger with a built-in solar panel for outdoor use.,7/27/2025
+243,243,243,26,"Creamy and delicious soup made with real butternut squash, ready to heat.",12/20/2025
+244,244,244,52,Durable tablet designed for kids with parental controls.,11/22/2025
+245,245,245,74,"Healthy fruit snacks, made with real fruit.",3/19/2026
+246,246,246,85,"Tender sweet corn kernels, ready to eat or add to dishes.",5/4/2025
+247,247,247,100,"Healthy salad made with quinoa, almonds, and mixed greens, perfect for a light meal.",5/26/2025
+248,248,248,50,Love-themed molds for creating desserts and treats.,10/4/2025
+249,249,249,61,Spicy cornbread infused with jalapeños for a kick of flavor at your next meal.,6/28/2025
+250,250,250,62,"A sweet and tangy dressing made with figs and balsamic vinegar, great on salads.",4/2/2025
+251,251,251,31,Golden-brown fritters made with sweet corn.,7/13/2025
+252,252,252,10,Durable scoop for perfectly shaped ice cream servings.,2/18/2026
+253,253,253,27,1080p wireless security camera with night vision.,10/19/2025
+254,254,254,30,Protective goggles for DIY and construction work.,1/22/2026
+255,255,255,14,Durable jump rope for cardio workouts.,1/15/2026
+256,256,256,45,Energy-efficient LED bulbs that can be controlled via smartphone.,3/31/2025
+257,257,257,73,Creamy chickpea dip infused with zesty garlic flavor.,9/5/2025
+258,258,258,66,Fun and colorful gardening tools designed for children.,10/11/2025
+259,259,259,20,Comfortable harness designed to keep pets safe in the car.,11/9/2025
+260,260,260,72,Organize coffee capsules with this stylish dispenser.,2/4/2026
+261,261,261,93,"Crunchy cacao nibs, great for adding to smoothies or baking.",6/11/2025
+262,262,262,46,Control lights remotely with this smart switch.,1/14/2026
+263,263,263,15,Ergonomic monitor stand for improved workspace organization.,10/26/2025
+264,264,264,28,Soft and chewy bar packed with protein and cinnamon flavors.,10/7/2025
+265,265,265,44,"Creamy ice cream with a warm cinnamon flavor, perfect for dessert.",12/27/2025
+266,266,266,2,Creamy mayonnaise made with avocado oil for a healthier twist.,9/15/2025
+267,267,267,64,Everything you need to make delicious spicy tuna rolls at home.,12/12/2025
+268,268,268,85,Delicious noodles tossed in a sesamegarlic sauce.,11/19/2025
+269,269,269,47,Smart tracker to locate keys or other items via app.,6/30/2025
+270,270,270,39,"Fresh, creamy avocados ideal for salads and guacamole.",6/7/2025
+271,271,271,35,Set of flexible molds for baking cakes and pastries.,9/18/2025
+272,272,272,37,"Ready-to-eat avocado slices, perfect for tacos.",3/9/2026
+273,273,273,62,Delicious plant-based burger made with organic black beans and spices.,12/29/2025
+274,274,274,81,Color-changing LED lights for home decoration with remote.,3/15/2026
+275,275,275,74,Convenient water bottle for pets on the go.,8/30/2025
+276,276,276,36,Cute fairy figurines to decorate your garden or potted plants.,10/19/2025
+277,277,277,10,Hand-poured candles made of natural soy wax.,12/17/2025
+278,278,278,12,"Juicy peach slices in light syrup, in convenient cups.",8/9/2025
+279,279,279,51,Fairy lights perfect for decorating patios and backyards.,12/23/2025
+280,280,280,12,A warm and sustainable wool scarf for chilly days.,3/13/2026
+281,281,281,44,Nutritious chia seeds great for smoothies,3/20/2026
+282,282,282,94,Wi-Fi enabled doorbell with HD camera and two-way audio.,6/15/2025
+283,283,283,8,Electric food steamer for healthy cooking.,3/17/2026
+284,284,284,10,True wireless earbuds with touch control.,1/5/2026
+285,285,285,68,"Sweet and nutritious potatoes, great for roasting.",1/23/2026
+286,286,286,26,Ready-to-bake cinnamon roll dough for easy breakfasts.,5/25/2025
+287,287,287,76,"A mix of strawberries, blueberries, and raspberries, great for smoothies or desserts.",7/18/2025
+288,288,288,35,Versatile multi-cooker for pressure cooking and slow cooking.,12/14/2025
+289,289,289,74,Stylish bookends to keep books organized on shelves.,12/19/2025
+290,290,290,63,Sustainable foam blocks for yoga practice.,12/12/2025
+291,291,291,20,Crispy roasted chickpeas seasoned to perfection,12/4/2025
+292,292,292,43,Compact wireless set for easy computer usability.,3/23/2026
+293,293,293,92,Everything you need to bake delicious chocolate chip cookies.,3/24/2026
+294,294,294,77,A nutritious shake with rich chocolate and refreshing mint flavors.,9/23/2025
+295,295,295,97,Bottle that tracks your water intake and reminds you to drink.,8/28/2025
+296,296,296,28,Designed for comfort and performance during workouts.,4/25/2025
+297,297,297,43,Comfortable carry for pets while hiking or traveling.,2/5/2026
+298,298,298,66,"Fluffy couscous that cooks in just minutes, perfect as a side.",2/27/2026
+299,299,299,57,Homemade ice cream maker for delicious desserts.,6/18/2025
+300,300,300,72,"Protein-rich quinoa, a great alternative to rice.",5/15/2025
+301,301,301,18,"Crispy baked radish chips, a healthy snack alternative.",8/12/2025
+302,302,302,65,Crispy and sweet dried apple slices,4/9/2025
+303,303,303,56,Eco-friendly cutting board that is safe for dishwashers.,12/17/2025
+304,304,304,44,"Classic ketchup made from organic tomatoes, no added sugar.",7/29/2025
+305,305,305,9,Fresh and juicy cherry tomatoes for salads and snacking.,12/16/2025
+306,306,306,10,Nutty granola bars for healthy snacking.,2/17/2026
+307,307,307,4,A flavorful pasta sauce made with roasted garlic.,10/21/2025
+308,308,308,21,Portable desk that can be adjusted for sitting or standing.,9/2/2025
+309,309,309,45,Cold pasta salad tossed with pesto and fresh vegetables.,7/22/2025
+310,310,310,51,Effective brush for removing loose hair from pets.,9/20/2025
+311,311,311,54,"Spicy jalapenos stuffed with cheese, ideal for appetizers.",5/22/2025
+312,312,312,63,Delicious plant-based burger made with organic black beans and spices.,6/23/2025
+313,313,313,3,"Juicy pork tenderloin, great for roasting.",8/18/2025
+314,314,314,43,Battery-operated air purifier for small spaces.,4/3/2025
+315,315,315,37,Juicy and tender boneless chicken breasts.,9/24/2025
+316,316,316,46,"Frozen shrimp sautéed in garlic butter, ready to thaw and serve over pasta or rice.",10/26/2025
+317,317,317,84,Mini refrigerator ideal for small spaces.,1/22/2026
+318,318,318,49,Noodles tossed in a spicy Thai peanut sauce.,6/13/2025
+319,319,319,10,"Crispy sweet potato bites, delicious as a side or snack.",1/3/2026
+320,320,320,3,Complete fondue set for chocolate and cheese parties.,6/7/2025
+321,321,321,64,"Super soft fleece blanket, perfect for coziness.",4/16/2025
+322,322,322,71,Keep bugs out while allowing fresh air in during summer.,11/6/2025
+323,323,323,2,A warming blend of ginger and turmeric for lattes.,6/12/2025
+324,324,324,83,High-quality matcha for making traditional tea or lattes.,3/6/2026
+325,325,325,73,Quick-cooking couscous flavored with herbs and spices.,2/1/2026
+326,326,326,66,"Chic suede ankle booties, perfect for dressing up or down.",10/25/2025
+327,327,327,72,Personal massager for muscle recovery.,4/4/2025
+328,328,328,66,Beautifully crafted jewelry box with compartments for storage.,10/20/2025
+329,329,329,28,"Thin rice noodles, ideal for stir-fries and soups.",3/9/2026
+330,330,330,76,Fun book filled with puzzles and games for kids.,7/26/2025
+331,331,331,16,Official size basketball for indoor and outdoor play.,3/21/2026
+332,332,332,23,Quick and easy rice pilaf mix for side dishes.,11/21/2025
+333,333,333,55,A soothing tea blend with turmeric and ginger for wellness.,6/29/2025
+334,334,334,75,Love-themed molds for creating desserts and treats.,11/29/2025
+335,335,335,89,"Versatile slicer for meats, cheeses, and vegetables.",11/6/2025
+336,336,336,92,A spicy marinade perfect for chicken and fish.,8/24/2025
+337,337,337,82,Cordless electric knife for effortless slicing.,1/9/2026
+338,338,338,28,Delicious frozen pizza with a variety of toppings.,11/6/2025
+339,339,339,55,Rich and sweet paprika spice for seasoning.,10/13/2025
+340,340,340,25,Frozen vegetable primavera for quick meals.,6/2/2025
+341,341,341,26,Durable ceramic bakeware for casseroles and desserts.,3/31/2025
+342,342,342,72,Sweet and tangy balsamic reduction for drizzling.,9/14/2025
+343,343,343,32,"Lightweight, expandable hoses for easy handling.",5/6/2025
+344,344,344,42,Sweet popcorn coated in a mixture of cinnamon and sugar.,9/15/2025
+345,345,345,31,Wax warmer for creating a soothing atmosphere with fragrances.,5/2/2025
+346,346,346,76,Stylish desk set to keep your workspace tidy and organized.,12/14/2025
+347,347,347,94,Stylish markers for labeling your indoor garden plants.,4/9/2025
+348,348,348,54,"Light and crispy baked chips, a healthier snack option.",12/30/2025
+349,349,349,29,Bottle that tracks your water intake and reminds you to drink.,12/21/2025
+350,350,350,43,Ergonomic stand for laptops to improve posture while working.,7/25/2025
+351,351,351,24,Bold graphic hoodie featuring a comfortable fit and soft fabric.,4/2/2025
+352,352,352,53,Crunchy granola clusters mixed with nuts and honey.,12/28/2025
+353,353,353,81,Crunchy pretzel bites filled with peanut butter,4/29/2025
+354,354,354,65,Creamy mayonnaise made with avocado oil for a healthier twist.,4/28/2025
+355,355,355,4,Stylish hooks to easily hang shower curtains.,10/9/2025
+356,356,356,50,Mild cheese great for sandwiches.,3/3/2026
+357,357,357,74,Durable journal for nature observations and notes.,2/17/2026
+358,358,358,88,Learning tablet with kid-friendly educational apps.,12/28/2025
+359,359,359,60,Delicious pie filled with coconut cream and topped with whipped cream.,7/8/2025
+360,360,360,25,Automated litter box that cleans itself after each use.,2/9/2026
+361,361,361,67,"Ready-to-eat beet salad with dressing, great side dish.",7/10/2025
+362,362,362,94,Complete karaoke system with microphones and speakers.,4/24/2025
+363,363,363,42,Creamy chickpea dip blended with tahini and garlic.,8/31/2025
+364,364,364,16,Gourmet potato skins loaded with cheddar cheese and bacon.,6/15/2025
+365,365,365,44,Stainless steel travel mug that keeps drinks hot or cold.,7/5/2025
+366,366,366,69,Breathable polo shirt designed for both style and comfort on the greens.,2/26/2026
+367,367,367,27,Multi-functional tool for emergency situations in the car.,5/19/2025
+368,368,368,85,Compact jump starter for emergency vehicle starts.,2/25/2026
+369,369,369,77,Quick and easy fried rice mixed with vegetables and soy sauce.,2/15/2026
+370,370,370,77,Handheld sprayer designed for washing pets easily.,11/1/2025
+371,371,371,38,Complete outdoor kit for camping and hiking.,12/30/2025
+372,372,372,88,Spicy chili sauce with garlic and sugar for a flavor kick.,4/8/2025
+373,373,373,31,"A delicious salad with quinoa, nuts, and cranberries.",2/19/2026
+374,374,374,93,Fairy lights perfect for decorating patios and backyards.,5/12/2025
+375,375,375,52,Handy keychain that emits a loud alarm for personal safety.,8/15/2025
+376,376,376,69,Durable tarp for outdoor camping and protection.,11/23/2025
+377,377,377,80,Ideal for creating custom designs on t-shirts and fabrics.,2/9/2026
+378,378,378,20,Durable jump rope with built-in counter for workouts.,11/14/2025
+379,379,379,40,Tofu stir-fried with fresh vegetables in teriyaki sauce.,7/26/2025
+380,380,380,4,Refreshing dessert bars made with pineapple and coconut.,3/19/2026
+381,381,381,28,Easily opens jar lids and bottle caps with one touch.,7/18/2025
+382,382,382,4,Crispy and delicious biscotti flavored with cranberry and almond.,6/14/2025
+383,383,383,67,Ready-to-bake cookie dough packed with chocolate chips.,5/19/2025
+384,384,384,53,A colorful printed maxi skirt for a bohemian look.,7/29/2025
+385,385,385,66,"Refreshing green tea infused with peach, perfect for a hot day.",5/26/2025
+386,386,386,27,A delicious chicken dish featuring honey and sesame flavors.,1/26/2026
+387,387,387,49,"Salmon fillets seasoned with lemon and dill, perfect for grilling.",5/21/2025
+388,388,388,20,Universal mount for smartphones on motorcycles.,1/26/2026
+389,389,389,41,Organizational cubes for easy packing and travel.,6/29/2025
+390,390,390,91,Rich chocolate protein powder for smoothies and baking.,2/24/2026
+391,391,391,54,A warm knitted scarf to keep you cozy in winter.,8/5/2025
+392,392,392,39,Bluetooth thermometer that alerts you when your meat is done.,3/30/2025
+393,393,393,29,"Delicate ravioli filled with roasted butternut squash and spices, perfect with a sage butter sauce.",12/19/2025
+394,394,394,79,"Fresh, creamy avocados ideal for salads and guacamole.",6/10/2025
+395,395,395,96,Educational robotics kit for building and programming.,6/14/2025
+396,396,396,20,Comfortable hiking boots for outdoor adventures.,8/23/2025
+397,397,397,85,A sweet and spicy sauce for dipping or cooking.,9/22/2025
+398,398,398,91,Compact projector for movies and presentations on the go.,5/12/2025
+399,399,399,55,Yoga socks designed to provide better grip and stability.,3/20/2026
+400,400,400,36,"Crispy and chewy granola bars, perfect for on-the-go.",11/30/2025
+401,401,401,82,High-carbon stainless steel chef knife for precision cutting.,11/10/2025
+402,402,402,12,Trendy belt bag for hands-free carrying.,1/25/2026
+403,403,403,28,"Steamed edamame tossed in a spicy garlic sauce, great for snacking.",9/19/2025
+404,404,404,89,"Floral and refreshing herbal tea, great hot or iced.",9/28/2025
+405,405,405,43,"Creamy dip made with caramelized onions, perfect for chips or veggies.",5/23/2025
+406,406,406,56,Inspiring cookbook with healthy recipes.,5/3/2025
+407,407,407,80,Fresh pre-cut carrot and celery sticks for easy snacking.,5/29/2025
+408,408,408,82,USB hub for expanding ports on computers and laptops.,11/26/2025
+409,409,409,63,Challenging and fun puzzle game for all ages.,1/14/2026
+410,410,410,58,Eco-friendly sealer for protecting concrete surfaces.,3/9/2026
+411,411,411,7,Blender for smoothies with a portable cup.,8/16/2025
+412,412,412,41,32GB USB flash drive with fast data transfer speeds.,1/25/2026
+413,413,413,64,A convenient powder mix combining greens and fruits for smoothies.,12/13/2025
+414,414,414,82,Crunchy pretzel bites filled with peanut butter,3/28/2026
+415,415,415,80,"Classic marinara sauce for pasta, pizza, or dipping.",6/6/2025
+416,416,416,32,"Soft pretzel bites, perfect for dipping in mustard or cheese sauce.",1/16/2026
+417,417,417,23,Lightweight leaf blower for maintaining outdoor spaces.,3/20/2026
+418,418,418,2,Rich basil pesto sauce for pasta and more.,9/30/2025
+419,419,419,65,Plant-based mix for a rich chocolate cake.,5/30/2025
+420,420,420,97,"Creamy ranch dressing, perfect for salads and dips.",8/5/2025
+421,421,421,51,Pure maple syrup for pancakes and more.,7/21/2025
+422,422,422,98,A sweet and spicy sauce for dipping or cooking.,1/28/2026
+423,423,423,23,"Crunchy roasted pumpkin seeds, great for snacking.",3/31/2025
+424,424,424,32,"Crispy sweet potato bites, delicious as a side or snack.",6/30/2025
+425,425,425,73,Fluffy pancakes with buttermilk flavor.,1/19/2026
+426,426,426,31,Instant mix for creamy vanilla pudding.,7/2/2025
+427,427,427,26,Automatically cooks eggs to your desired level.,7/23/2025
+428,428,428,58,Convenient belt with pockets for easy access to tools while gardening.,2/21/2026
+429,429,429,68,Spicy buffalo sauce ideal for wings or dipping.,2/11/2026
+430,430,430,10,Savory sauce for vegetable and meat stir-fries.,10/31/2025
+431,431,431,39,A tailored slim fit shirt for a polished look at work.,7/4/2025
+432,432,432,50,Savory teriyaki sauce for stir-frying veggies or meats.,4/27/2025
+433,433,433,57,Durable and soft frisbee designed for dogs to play with.,10/7/2025
+434,434,434,57,"Fresh and organic sweet potatoes, ideal for roasting.",1/3/2026
+435,435,435,49,Extra virgin olive oil infused with fresh basil.,1/15/2026
+436,436,436,24,"Ready-to-eat salad with kale, lemon, and cheese.",4/19/2025
+437,437,437,28,"Low-carb zucchini noodles, perfect for a healthy alternative to pasta.",11/14/2025
+438,438,438,38,Energy-efficient window air conditioner for cooling.,1/8/2026
+439,439,439,15,Crunchy pretzel sticks made with honey and whole wheat.,5/13/2025
+440,440,440,81,Durable speaker designed for outdoor use with water resistance.,6/23/2025
+441,441,441,37,Light and fluffy popcorn coated in aged white cheddar.,10/15/2025
+442,442,442,28,Versatile chair that easily folds up for carrying.,8/27/2025
+443,443,443,7,A bright and zesty dressing perfect for salads and tacos.,9/2/2025
+444,444,444,31,Moisturizing body wash with natural ingredients.,9/23/2025
+445,445,445,6,Add a pop of color with this stylish patterned knit scarf.,12/5/2025
+446,446,446,98,"Classic A-line skirt that flatters every figure, perfect for work or play.",4/17/2025
+447,447,447,84,Passive noise reduction headphones for focus.,3/27/2026
+448,448,448,16,Accurate stopwatch for timing events and workouts.,3/6/2026
+449,449,449,88,Sweetened sticky rice served with fresh mango and coconut sauce.,8/20/2025
+450,450,450,69,Borosilicate glass water bottle with silicone sleeve.,7/4/2025
+451,451,451,47,Non-stick utensils for safe and easy cooking.,2/23/2026
+452,452,452,18,"A smoky barbecue sauce, ideal for grilling and dipping.",11/17/2025
+453,453,453,25,Creamy mayonnaise made with avocado oil for a healthier twist.,9/23/2025
+454,454,454,20,Hearty tomato soup made from organic ingredients.,8/28/2025
+455,455,455,26,Monthly subscription for freshly roasted coffee delivered to your door.,2/21/2026
+456,456,456,21,Complete set of gardening tools for all your needs.,9/1/2025
+457,457,457,26,All-in-one kit for growing herbs in your kitchen.,4/17/2025
+458,458,458,59,Juicy raisins coated in rich dark chocolate.,12/28/2025
+459,459,459,68,"Rich chocolate cups filled with almond butter, a delicious treat.",7/29/2025
+460,460,460,96,Windshield sunshade for car interior protection.,7/9/2025
+461,461,461,32,A nourishing bowl of sweet potatoes and chickpeas with spices.,8/30/2025
+462,462,462,15,Personal massager for muscle recovery.,12/30/2025
+463,463,463,42,High-quality voice recorder for lectures and meetings.,1/4/2026
+464,464,464,23,"Pitted black olives, perfect for salads and pizzas.",10/9/2025
+465,465,465,5,"Crumbled feta cheese, perfect for salads and Mediterranean dishes.",4/17/2025
+466,466,466,25,"Heavy-duty rope suitable for boating, camping, and general use.",12/12/2025
+467,467,467,38,Airtight container to keep pet food fresh.,1/25/2026
+468,468,468,46,A classic white button-up shirt for a polished appearance.,11/4/2025
+469,469,469,74,Traditional basil pesto made with extra virgin olive oil.,9/8/2025
+470,470,470,50,Safe and fun trampoline for children.,10/28/2025
+471,471,471,20,"A fresh salad made with black beans, corn, and a zesty dressing, great for summer cookouts.",12/19/2025
+472,472,472,10,"Rich tomato soup flavored with fresh basil, ready to heat up.",9/11/2025
+473,473,473,34,Space-saving bike for indoor workouts.,6/11/2025
+474,474,474,41,Easy-to-use tiebacks for curtains or drapes.,4/3/2025
+475,475,475,96,Foldable reclining camping chair with cup holder.,11/6/2025
+476,476,476,5,Rich almond butter encased in dark chocolate.,6/6/2025
+477,477,477,97,Hearty tomato soup made from organic ingredients.,11/14/2025
+478,478,478,82,"Light and crispy baked chips, a healthier snack option.",4/4/2025
+479,479,479,72,Natural energy bites packed with fruits and nuts for a perfect snack.,7/11/2025
+480,480,480,16,All-natural skincare set for daily use.,1/4/2026
+481,481,481,76,Soft cookies made with almond butter,11/1/2025
+482,482,482,76,Complete set of cooking utensils made from bamboo.,5/20/2025
+483,483,483,45,Space-saving collapsible bottle for outdoor activities.,11/27/2025
+484,484,484,26,Advanced wristband that tracks daily activities and sleep.,9/20/2025
+485,485,485,45,Juicy and tender boneless chicken breasts.,5/20/2025
+486,486,486,70,Convenient carrier for transporting yoga mat.,1/30/2026
+487,487,487,41,"Whole wheat wraps filled with spinach, feta, and herbs.",4/13/2025
+488,488,488,65,Leak-proof bottles for travel-sized toiletries.,6/17/2025
+489,489,489,71,Training tool for reinforcing commands and behavior in dogs.,9/6/2025
+490,490,490,85,Set with various resistance bands for workouts.,5/1/2025
+491,491,491,49,"Crunchy granola with chocolate and coconut, great for breakfast or snacks.",10/26/2025
+492,492,492,12,"Rich and creamy dressing with garlic flavor, perfect for salads.",2/16/2026
+493,493,493,43,"Spicy jalapenos stuffed with cheese, ideal for appetizers.",9/9/2025
+494,494,494,51,Boost your Wi-Fi signal for better coverage.,11/29/2025
+495,495,495,16,"Hearty beef stew with vegetables, ready to heat and serve.",6/15/2025
+496,496,496,26,"Frozen shrimp seasoned with chili and lime, perfect for quick dinners.",10/15/2025
+497,497,497,80,Pack of ultra-soft microfiber cloths for cleaning.,10/30/2025
+498,498,498,77,Portable induction cooktop for quick heating.,4/20/2025
+499,499,499,28,A sweet and spicy sauce for dipping or glazing.,6/10/2025
+500,500,500,68,Stay hydrated with refreshing flavored water.,10/22/2025
