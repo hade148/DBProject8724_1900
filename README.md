@@ -38,19 +38,19 @@ This database provides a reliable solution to:
 - **Customers** can book attractions, purchase tickets, and submit reviews.
 - **Business Managers** can analyze popular attractions and customer satisfaction.
 - **Support Teams** can track booking/payment relationships and resolve issues quickly.
-
-<img width="1845" height="789" alt="Screenshot 2026-04-13 225842" src="https://github.com/user-attachments/assets/a3711a36-d6a5-4b26-aca7-46caf8a6759f" />
-<img width="1751" height="789" alt="Screenshot 2026-04-13 230115" src="https://github.com/user-attachments/assets/a201985f-9863-4d41-849d-6635a77eb7fb" />
-<img width="1729" height="785" alt="Screenshot 2026-04-13 225957" src="https://github.com/user-attachments/assets/5e76834b-3dc5-4299-9342-ad1fefb62e46" />
-<img width="1668" height="796" alt="Screenshot 2026-04-13 230142" src="https://github.com/user-attachments/assets/d3a10604-6b76-43fd-aef0-ce5a609cabdb" />
-
 ---
 
 ## AI-Generated Prototype
 ### System Screens
 The system was planned using a **Top-Down approach** with UI characterization in Google AI Studio.
 
-- **[Live Demo (AI Studio Link)](https://ai.studio/apps/22d49e6f-06a0-43ed-933f-a033e8c625c5)**
+ **[Live Demo (AI Studio Link)](https://ai.studio/apps/22d49e6f-06a0-43ed-933f-a033e8c625c5)**
+
+
+<img width="1845" height="789" alt="Screenshot 2026-04-13 225842" src="https://github.com/user-attachments/assets/a3711a36-d6a5-4b26-aca7-46caf8a6759f" />
+<img width="1751" height="789" alt="Screenshot 2026-04-13 230115" src="https://github.com/user-attachments/assets/a201985f-9863-4d41-849d-6635a77eb7fb" />
+<img width="1729" height="785" alt="Screenshot 2026-04-13 225957" src="https://github.com/user-attachments/assets/5e76834b-3dc5-4299-9342-ad1fefb62e46" />
+<img width="1668" height="796" alt="Screenshot 2026-04-13 230142" src="https://github.com/user-attachments/assets/d3a10604-6b76-43fd-aef0-ce5a609cabdb" />
 
 
 ---
@@ -59,106 +59,11 @@ The system was planned using a **Top-Down approach** with UI characterization in
 ### ERD (Entity-Relationship Diagram) & DSD (Data Structure Diagram)
 The database schema was designed according to **3NF (Third Normal Form)** to reduce redundancy and enforce consistency.
 
-| Type | Diagram |
-| :--- | :--- |
-| **ERD** | ![ERD](phase1/ERDAndDSTFiles/ERD.png) |
-| **DSD** | ![DSD](phase1/ERDAndDSTFiles/DSD.png) |
+### ERD (Entity-Relationship Diagram)    
+![ERD Diagram](./phase1/ERDandDSDfiles/ERD.png)
 
----
-
-## Data Dictionary
-
-### 1. CUSTOMER Table
-**Role:** Stores customer profile and account details.
-
-| Column Name | Data Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| first_name | VARCHAR(20) | NOT NULL | Customer first name |
-| last_name | VARCHAR(20) | NOT NULL | Customer last name |
-| email | VARCHAR(50) | NOT NULL | Customer email |
-| phone | VARCHAR(10) | NOT NULL | Customer phone number |
-| password | VARCHAR(20) | NOT NULL | Customer password |
-| country | VARCHAR(20) | NOT NULL | Country of residence |
-| customer_id | INT | PRIMARY KEY | Unique customer ID |
-
----
-
-### 2. ATTRACTION Table
-**Role:** Stores attraction catalog information.
-
-| Column Name | Data Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| attraction_id | INT | PRIMARY KEY | Unique attraction ID |
-| name | VARCHAR(20) | NOT NULL | Attraction name |
-| location | VARCHAR(20) | NOT NULL | Attraction location |
-| description | VARCHAR(1000) | - | Attraction description |
-| opening_hours | TIME | NOT NULL | Daily opening time |
-| category | VARCHAR(20) | NOT NULL | Attraction category |
-| price | FLOAT | NOT NULL | Base attraction price |
-
----
-
-### 3. TICKET Table
-**Role:** Stores ticket definitions per attraction.
-
-| Column Name | Data Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| ticket_id | INT | PRIMARY KEY | Unique ticket ID |
-| attraction_id | INT | FOREIGN KEY, UNIQUE | Linked attraction |
-| price | FLOAT | NOT NULL | Ticket price |
-| valid_date | DATE | NOT NULL | Ticket validity date |
-| ticket_type | VARCHAR(20) | NOT NULL | Ticket type |
-| available_quantity | INT | - | Remaining quantity |
-
----
-
-### 4. PAYMENT Table
-**Role:** Stores payment transactions.
-
-| Column Name | Data Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| payment_id | INT | PRIMARY KEY | Unique payment ID |
-| booking_id | INT | UNIQUE | Linked booking ID |
-| amount | FLOAT | NOT NULL | Paid amount |
-
----
-
-### 5. BOOKING Table
-**Role:** Stores booking operations made by customers.
-
-| Column Name | Data Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| booking_id | INT | PRIMARY KEY | Unique booking ID |
-| customer_id | INT | FOREIGN KEY, UNIQUE | Linked customer |
-| booking_date | DATE | NOT NULL | Booking creation date |
-| booking_status | VARCHAR(20) | - | Booking status |
-| total_price | FLOAT | NOT NULL | Total booking price |
-| payment_id | INT | FOREIGN KEY | Linked payment |
-
----
-
-### 6. REVIEW Table
-**Role:** Stores customer feedback per attraction.
-
-| Column Name | Data Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| review_id | INT | PRIMARY KEY | Unique review ID |
-| customer_id | INT | FOREIGN KEY, UNIQUE | Reviewer customer |
-| attraction_id | INT | FOREIGN KEY, UNIQUE | Reviewed attraction |
-| rating | FLOAT | NOT NULL | Numeric rating |
-| comment | VARCHAR(100) | NOT NULL | Written review |
-| review_date | DATE | NOT NULL | Review date |
-
----
-
-### 7. BOOKINGTICKET Table
-**Role:** Junction table between bookings and tickets.
-
-| Column Name | Data Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| booking_id | INT | PK (composite), FOREIGN KEY | Related booking |
-| ticket_id | INT | PK (composite), FOREIGN KEY | Related ticket |
-| quantity | INT | NOT NULL | Number of tickets in booking |
+### DSD (Data Structure Diagram)   
+![DSD Diagram](./phase1/ERDandDSDfiles/DSD.png)
 
 ---
 
@@ -166,31 +71,83 @@ The database schema was designed according to **3NF (Third Normal Form)** to red
 Provide the following SQL scripts:
 
 - **Create Tables Script**  
-  **[View Create Tables](init-db/02-create-tables.sql)**
+  **[View Create Tables](phase1/SQLscripts/02-create-tables.sql)**
 
 - **Drop Tables Script**  
-  **[View Drop Tables](init-db/dropTables.sql)**
+  **[View Drop Tables](phase1/SQLscripts/01-dropTables.sql)**
 
 - **Insert Data Script**  
-  **[View Insert Data](init-db/insertTables.sql)**
+  **[View Insert Data](phase1/SQLscripts/03-insertTables.sql)**
 
 - **Select All Data Script**  
-  **[View Select All](init-db/selectAll.sql)**
-
-- **CSV Loading Script**  
-  **[View CSV Loader](init-db/03-load-from-csv.sql)**
+  **[View Select All](phase1/SQLscripts/04-selectAll.sql)**
 
 ---
 
-## Data Population Methods
+### Data  
 
-### First Method: External Data Generator (Mockaroo / GenerateData)
-Used to generate CSV data files for core tables.
+#### First tool: using [Mockaroo](https://www.mockaroo.com/) / external generator to create CSV files
+Mockaroo was used to generate realistic CSV datasets that match the schema field names and data types.  
+For each table we defined the exact column names (as in the SQL schema), selected appropriate generators (names, emails, prices, dates, etc.), and exported the result as **CSV with header** (Windows CRLF) to ensure smooth import into PostgreSQL.
 
-Example file from repository:  
-- **[View attraction mock data](mockData/attraction_MOCK_DATA.csv)**
+##### Configuring data generation for **ATTRACTION**
+We created a Mockaroo schema for the **ATTRACTION** table with the following key mapping:
+- `attraction_id` → Row Number (unique identifier)
+- `name` → Product Name (used as attraction name)
+- `location` → Street Name (used as attraction location)
+- `description` → Product Description
+- `opening_hours` → Time (12-hour format)
+- `category` → Product Category
+- `price` → Product Price
 
-> Add screenshots: generator setup, CSV export, import process, count results.
+**Mockaroo configuration screenshot:**  
+<img width="1282" height="632" alt="attraction" src="https://github.com/user-attachments/assets/f3157410-3879-4921-a2dc-d89b9f81408b" />
+
+##### Configuring data generation for **CUSTOMER**
+For the **CUSTOMER** table we configured identity and contact fields with realistic constraints:
+- `customer_id` → Row Number
+- `first_name` / `last_name` → First/Last Name generators
+- `email` → Email Address generator
+- `phone` → Phone generator with formatted pattern
+- `password` → Password generator (minimum length and mixed character settings)
+- `country` → Country generator
+
+**Mockaroo configuration screenshot:**  
+<img width="1796" height="641" alt="customer" src="https://github.com/user-attachments/assets/0eaeba06-1eae-4348-a6aa-8d0c0be348f2" />
+
+##### Configuring data generation for **TICKET**
+For the **TICKET** table we generated ticket details with meaningful ranges:
+- `ticket_id` → Row Number
+- `attraction_id` → Row Number (to match existing attraction identifiers)
+- `price` → Product Price
+- `valid_date` → Datetime within the project-defined date range
+- `ticket_type` → Custom List (general_admission, VIP, student, senior)
+- `available_quantity` → Number range (1–100)
+
+**Mockaroo configuration screenshot:**  
+<img width="1806" height="577" alt="ticket" src="https://github.com/user-attachments/assets/d7d62a22-a114-47e3-9e9c-f4b7b3944bdc" />
+
+##### Configuring data generation for **BOOKING**
+For the **BOOKING** table we generated transactional booking records:
+- `booking_id` → Row Number
+- `customer_id` → Row Number (to match existing customers)
+- `booking_date` → Datetime within a defined range
+- `total_price` → Product Price
+- `payment_id` → Row Number (to match existing payments)
+
+**Mockaroo configuration screenshot:**  
+<img width="1389" height="524" alt="booking" src="https://github.com/user-attachments/assets/a2e7cf32-2f92-4765-bae8-a3eafd74b858" />
+
+##### Output files
+The generated CSV files were exported and saved in the project repository for loading/import.
+
+Example CSV from repository:  
+ **[View `attraction_MOCK_DATA.csv`](phase1/mockData/attraction_MOCK_DATA.csv)**
+
+> Add here (optional, recommended like in the lecturer example):
+> - screenshots of the CSV files after download  
+> - screenshots of the import process into PostgreSQL (pgAdmin Import / COPY)  
+> - screenshots of `SELECT COUNT(*)` verification results for each populated table
 
 ---
 
