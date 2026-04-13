@@ -182,6 +182,8 @@ Backup and restore were executed to ensure data safety and reproducibility.
 - A full backup file was created with date/time naming.
 - Restore was tested on a clean DB instance.
 - Post-restore validation was performed using row-count queries.
+📁 **[Go to Backup Folder](phase1/Backup)**
+
 <img width="1050" height="830" alt="image" src="https://github.com/user-attachments/assets/04c34005-5214-4de4-87d3-7cfa4428a844" />
 <img width="870" height="397" alt="image" src="https://github.com/user-attachments/assets/3df95fad-846b-4226-9242-d19aac69427c" />
 
