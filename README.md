@@ -14,7 +14,6 @@
   - [Logical Design](#logical-design)
   - [Data Dictionary](#data)
   - [SQL Scripts](#sql-scripts)
-  - [Data Population Methods](#data-population-methods)
   - [Backup & Recovery](#backup--recovery)
 
 ---
