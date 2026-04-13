@@ -12,7 +12,7 @@
   - [Introduction](#introduction)
   - [AI-Generated Prototype](#ai-generated-prototype)
   - [Logical Design](#logical-design)
-  - [Data Dictionary](#data-dictionary)
+  - [Data Dictionary](#data)
   - [SQL Scripts](#sql-scripts)
   - [Data Population Methods](#data-population-methods)
   - [Backup & Recovery](#backup--recovery)
@@ -86,7 +86,7 @@ Provide the following SQL scripts:
 
 ### Data  
 
-#### First tool: using [Mockaroo](https://www.mockaroo.com/) / external generator to create CSV files
+#### First tool: using [Mockaroo](https://www.mockaroo.com/) to create CSV files
 Mockaroo was used to generate realistic CSV datasets that match the schema field names and data types.  
 For each table we defined the exact column names (as in the SQL schema), selected appropriate generators (names, emails, prices, dates, etc.), and exported the result as **CSV with header** (Windows CRLF) to ensure smooth import into PostgreSQL.
 
@@ -138,31 +138,29 @@ For the **BOOKING** table we generated transactional booking records:
 **Mockaroo configuration screenshot:**  
 <img width="1389" height="524" alt="booking" src="https://github.com/user-attachments/assets/a2e7cf32-2f92-4765-bae8-a3eafd74b858" />
 
-##### Output files
-The generated CSV files were exported and saved in the project repository for loading/import.
 
-Example CSV from repository:  
- **[View `attraction_MOCK_DATA.csv`](phase1/mockData/attraction_MOCK_DATA.csv)**
+#### Second tool: Loading from files (CSV Import)
+The import process was performed through the pgAdmin import window:
+<img width="1041" height="375" alt="צילום מסך 2026-04-14 003427" src="https://github.com/user-attachments/assets/96ac8bb0-b8ef-4aa2-8689-a4601fc09bb7" />
 
-> Add here (optional, recommended like in the lecturer example):
-> - screenshots of the CSV files after download  
-> - screenshots of the import process into PostgreSQL (pgAdmin Import / COPY)  
-> - screenshots of `SELECT COUNT(*)` verification results for each populated table
+After running the import, pgAdmin confirmed the process completed successfully:
+<img width="971" height="389" alt="צילום מסך 2026-04-14 003350" src="https://github.com/user-attachments/assets/ac1b9d4c-b288-4e80-a1da-e487ffdfc5a9" />
 
 ---
 
-### Second Method: CSV / Direct Data Import
-Used for loading pre-generated files into PostgreSQL.
+##### Row Count Validation
+To verify that the table was populated correctly and meets the project requirements, we executed:
 
-- Input folder: `init-db/generated-data/`
-- Loader script: **[03-load-from-csv.sql](init-db/03-load-from-csv.sql)**
+`SELECT COUNT(*) FROM CUSTOMER;`
 
-> Add screenshots: CSV files, pgAdmin import / SQL load execution, success output.
+<img width="183" height="111" alt="SQL COUNT query" src="https://github.com/user-attachments/assets/f13716d4-8084-40f0-a62c-0859346dbe8c" />
+
+**Result:** `20000` rows successfully loaded into the `CUSTOMER` table.
 
 ---
 
-### Third Method: Python Scripts
-Used for large-scale synthetic generation and direct insertion.
+#### Third tool: using Python scripts for direct insertion
+PythonUsed for large-scale synthetic generation and direct insertion.
 
 - **Direct DB insert script:**  
   **[insert_direct_to_db.py](scripts/insert_direct_to_db.py)**
