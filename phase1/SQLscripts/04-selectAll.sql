@@ -1,4 +1,4 @@
--- שליפת כל הנתונים מכל הטבלאות
+-- Retrieving all data from all tables
 SELECT * FROM CUSTOMER;
 SELECT * FROM ATTRACTION;
 SELECT * FROM PAYMENT;
@@ -7,7 +7,7 @@ SELECT * FROM TICKET;
 SELECT * FROM REVIEW;
 SELECT * FROM BOOKINGTICKET;
 
--- ספירת כמות הרשומות בכל טבלה
+-- Counting the number of records in each table
 SELECT 'CUSTOMER' AS table_name, COUNT(*) FROM CUSTOMER;
 SELECT 'ATTRACTION' AS table_name, COUNT(*) FROM ATTRACTION;
 SELECT 'PAYMENT' AS table_name, COUNT(*) FROM PAYMENT;
