@@ -1,9 +1,9 @@
 # AttraTicket: Attraction Booking System
 
 ## Project Information
-**Prepared by:** Hadasa Esther Elbaz, Tamar Rozen 
+**Prepared by:** Hadasa Esther Elbaz, Tamar Rozen
 **System Name:** AttraTicket  
-**Module:** Attraction Booking, Ticketing & Customer Reviews
+**Module:** Attraction Booking, Ticketing 
 
 ---
 
