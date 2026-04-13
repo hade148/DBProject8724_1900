@@ -146,8 +146,6 @@ The import process was performed through the pgAdmin import window:
 After running the import, pgAdmin confirmed the process completed successfully:
 <img width="971" height="389" alt="צילום מסך 2026-04-14 003350" src="https://github.com/user-attachments/assets/ac1b9d4c-b288-4e80-a1da-e487ffdfc5a9" />
 
----
-
 ##### Row Count Validation
 To verify that the table was populated correctly and meets the project requirements, we executed:
 
@@ -159,14 +157,11 @@ To verify that the table was populated correctly and meets the project requireme
 
 ---
 
-#### Third tool: using Python scripts for direct insertion
-PythonUsed for large-scale synthetic generation and direct insertion.
+#### Third tool: Python Program — Direct Insert to the Database
+A Python script connects directly to PostgreSQL and inserts data into the tables without using an intermediate import step.
 
 - **Direct DB insert script:**  
   **[insert_direct_to_db.py](scripts/insert_direct_to_db.py)**
-
-- **Bulk generator script (CSV/SQL modes):**  
-  **[generate_bulk_data.py](scripts/generate_bulk_data.py)**
 
 Default prepared volume profile:
 - CUSTOMER: 20,000  
@@ -181,28 +176,13 @@ Default prepared volume profile:
 
 ---
 
-### Validation Queries
-```sql
-SELECT COUNT(*) FROM CUSTOMER;
-SELECT COUNT(*) FROM ATTRACTION;
-SELECT COUNT(*) FROM PAYMENT;
-SELECT COUNT(*) FROM BOOKING;
-SELECT COUNT(*) FROM TICKET;
-SELECT COUNT(*) FROM REVIEW;
-SELECT COUNT(*) FROM BOOKINGTICKET;
-```
-
-> Add screenshots of each query result.
-
----
-
 ## Backup & Recovery
 Backup and restore were executed to ensure data safety and reproducibility.
 
 - A full backup file was created with date/time naming.
 - Restore was tested on a clean DB instance.
 - Post-restore validation was performed using row-count queries.
-
-> Add screenshots: backup command/result, restore process, validation output.
+<img width="1050" height="830" alt="image" src="https://github.com/user-attachments/assets/04c34005-5214-4de4-87d3-7cfa4428a844" />
+<img width="870" height="397" alt="image" src="https://github.com/user-attachments/assets/3df95fad-846b-4226-9242-d19aac69427c" />
 
 ---
