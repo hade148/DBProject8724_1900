@@ -2,7 +2,7 @@ CREATE TABLE CUSTOMER
 (
   first_name VARCHAR(20) NOT NULL,
   email VARCHAR(50) NOT NULL CHECK (email LIKE '%_@_%._%'),
-  phone VARCHAR(10) NOT NULLCHECK (phone NOT LIKE '%[^0-9]%'),
+  phone VARCHAR(10) NOT NULL CHECK (phone NOT LIKE '%[^0-9]%'),
   customer_id INT NOT NULL,
   last_name VARCHAR(20) NOT NULL,
   password VARCHAR(20) NOT NULL,

@@ -1,9 +1,9 @@
 # AttraTicket: Attraction Booking System
 
 ## Project Information
-**Prepared by:** Hadasa Esther Elbaz, Tamar Rozen 
+**Prepared by:** Hadasa Esther Elbaz, Tamar Rozen
 **System Name:** AttraTicket  
-**Module:** Attraction Booking, Ticketing & Customer Reviews
+**Module:** Attraction Booking, Ticketing 
 
 ---
 
@@ -157,19 +157,10 @@ To verify that the table was populated correctly and meets the project requireme
 ---
 
 #### Third tool: Python Program — Direct Insert to the Database
-A Python script connects directly to PostgreSQL and inserts data into the tables without using an intermediate import step.
+A Python script connects directly to PostgreSQL and inserts data into the tables without using an intermediate import step (CSV/SQL import).
 
 - **Direct DB insert script:**  
-  **[insert_direct_to_db.py](scripts/insert_direct_to_db.py)**
-
-Default prepared volume profile:
-- CUSTOMER: 20,000  
-- ATTRACTION: 20,000  
-- PAYMENT: 500  
-- BOOKING: 500  
-- TICKET: 500  
-- REVIEW: 500  
-- BOOKINGTICKET: 500  
+  📜 **[View `insert_data.py`](phase1/programingData/insert_data.py)**
 
 > Add screenshots: script execution and output counts.
 
@@ -181,9 +172,14 @@ Backup and restore were executed to ensure data safety and reproducibility.
 - A full backup file was created with date/time naming.
 - Restore was tested on a clean DB instance.
 - Post-restore validation was performed using row-count queries.
-📁 **[Go to Backup Folder](phase1/Backup)**
+📁 **[Go to Backup Folder](phase1/Backup)**  
+📦 **[View Backup File `backup14_04_2026`](phase1/Backup/backup14_04_2026)**
 
 <img width="1050" height="830" alt="image" src="https://github.com/user-attachments/assets/04c34005-5214-4de4-87d3-7cfa4428a844" />
 <img width="870" height="397" alt="image" src="https://github.com/user-attachments/assets/3df95fad-846b-4226-9242-d19aac69427c" />
+
+the restore:
+<img width="1050" height="601" alt="image" src="https://github.com/user-attachments/assets/364fa4d9-a3a1-4692-b9da-1aa06636da41" />
+<img width="565" height="391" alt="image" src="https://github.com/user-attachments/assets/cde294f5-97bc-4d23-b1d4-ae58a5db1b7b" />
 
 ---
