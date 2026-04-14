@@ -91,11 +91,16 @@ def truncate_tables(cur):
     print("  [OK] Truncated existing rows")
 
 
-def generate_customers(row_count):
+def get_next_id(cur, table_name, id_column):
+    cur.execute(f"SELECT COALESCE(MAX({id_column}), 0) + 1 FROM {table_name}")
+    return cur.fetchone()[0]
+
+
+def generate_customers(row_count, start_customer_id=1):
     rows = []
     used_emails = set()
 
-    for customer_id in range(1, row_count + 1):
+    for customer_id in range(start_customer_id, start_customer_id + row_count):
         first_name = random.choice(FIRST_NAMES)
         last_name = random.choice(LAST_NAMES)
         country = random.choice(COUNTRIES)
@@ -120,10 +125,10 @@ def generate_customers(row_count):
     return rows
 
 
-def generate_attractions(row_count):
+def generate_attractions(row_count, start_attraction_id=1):
     rows = []
 
-    for attraction_id in range(1, row_count + 1):
+    for attraction_id in range(start_attraction_id, start_attraction_id + row_count):
         category = random.choice(ATTRACTION_TYPES)
         city = random.choice(CITIES)
         name = f"{category}{attraction_id}"
@@ -145,10 +150,10 @@ def generate_attractions(row_count):
     return rows
 
 
-def generate_tickets(attractions):
+def generate_tickets(attractions, start_ticket_id=1):
     rows = []
 
-    for ticket_id, attraction in enumerate(attractions, start=1):
+    for ticket_id, attraction in enumerate(attractions, start=start_ticket_id):
         attraction_id = attraction[0]
         attraction_price = attraction[6]
         ticket_price = max(1.0, round(attraction_price * random.uniform(0.8, 1.2), 2))
@@ -167,21 +172,23 @@ def generate_tickets(attractions):
     return rows
 
 
-def generate_payments(row_count):
+def generate_payments(booking_ids, start_payment_id=1):
     rows = []
-    for payment_id in range(1, row_count + 1):
-        rows.append((payment_id, payment_id, round(random.uniform(25.0, 400.0), 2)))
+    for idx, booking_id in enumerate(booking_ids):
+        payment_id = start_payment_id + idx
+        rows.append((payment_id, booking_id, round(random.uniform(25.0, 400.0), 2)))
     return rows
 
 
-def generate_bookings(customers, payments):
+def generate_bookings(customers, payments, booking_ids):
     rows = []
     today = date.today()
 
-    for booking_id, customer in enumerate(customers, start=1):
+    for idx, customer in enumerate(customers):
+        booking_id = booking_ids[idx]
         customer_id = customer[0]
-        payment_id = payments[booking_id - 1][0]
-        total_price = payments[booking_id - 1][2]
+        payment_id = payments[idx][0]
+        total_price = payments[idx][2]
 
         rows.append(
             (
@@ -197,14 +204,15 @@ def generate_bookings(customers, payments):
     return rows
 
 
-def generate_reviews(customers, attractions):
+def generate_reviews(customers, attractions, start_review_id=1):
     rows = []
     review_count = min(len(customers), len(attractions))
     today = date.today()
 
-    for review_id in range(1, review_count + 1):
-        customer_id = customers[review_id - 1][0]
-        attraction_id = attractions[review_id - 1][0]
+    for offset in range(review_count):
+        review_id = start_review_id + offset
+        customer_id = customers[offset][0]
+        attraction_id = attractions[offset][0]
 
         rows.append(
             (
@@ -329,12 +337,21 @@ def main():
         if RESET_TABLES:
             truncate_tables(cur)
 
-        customers = generate_customers(DEFAULT_ROWS)
-        attractions = generate_attractions(DEFAULT_ROWS)
-        tickets = generate_tickets(attractions)
-        payments = generate_payments(DEFAULT_ROWS)
-        bookings = generate_bookings(customers, payments)
-        reviews = generate_reviews(customers, attractions)
+        start_customer_id = get_next_id(cur, "CUSTOMER", "customer_id")
+        start_attraction_id = get_next_id(cur, "ATTRACTION", "attraction_id")
+        start_ticket_id = get_next_id(cur, "TICKET", "ticket_id")
+        start_booking_id = get_next_id(cur, "BOOKING", "booking_id")
+        start_payment_id = get_next_id(cur, "PAYMENT", "payment_id")
+        start_review_id = get_next_id(cur, "REVIEW", "review_id")
+
+        booking_ids = list(range(start_booking_id, start_booking_id + DEFAULT_ROWS))
+
+        customers = generate_customers(DEFAULT_ROWS, start_customer_id)
+        attractions = generate_attractions(DEFAULT_ROWS, start_attraction_id)
+        tickets = generate_tickets(attractions, start_ticket_id)
+        payments = generate_payments(booking_ids, start_payment_id)
+        bookings = generate_bookings(customers, payments, booking_ids)
+        reviews = generate_reviews(customers, attractions, start_review_id)
         bookingtickets = generate_bookingtickets(bookings, tickets)
 
         print("Inserting generated data (FK-safe order):")
