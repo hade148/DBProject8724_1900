@@ -47,10 +47,9 @@ The system was planned using a **Top-Down approach** with UI characterization in
 
 
 <img width="1845" height="789" alt="Screenshot 2026-04-13 225842" src="https://github.com/user-attachments/assets/a3711a36-d6a5-4b26-aca7-46caf8a6759f" />
+<img width="1551" height="879" alt="צילום מסך 2026-04-14 114529" src="https://github.com/user-attachments/assets/095fea65-4622-469e-973b-34fedab30abe" />
 <img width="1751" height="789" alt="Screenshot 2026-04-13 230115" src="https://github.com/user-attachments/assets/a201985f-9863-4d41-849d-6635a77eb7fb" />
 <img width="1729" height="785" alt="Screenshot 2026-04-13 225957" src="https://github.com/user-attachments/assets/5e76834b-3dc5-4299-9342-ad1fefb62e46" />
-<img width="1668" height="796" alt="Screenshot 2026-04-13 230142" src="https://github.com/user-attachments/assets/d3a10604-6b76-43fd-aef0-ce5a609cabdb" />
-
 
 ---
 
