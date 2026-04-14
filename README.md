@@ -160,9 +160,9 @@ To verify that the table was populated correctly and meets the project requireme
 A Python script connects directly to PostgreSQL and inserts data into the tables without using an intermediate import step (CSV/SQL import).
 
 - **Direct DB insert script:**  
-  📜 **[View `insert_data.py`](phase1/programingData/insert_data.py)**
-
-> Add screenshots: script execution and output counts.
+  **[View `insert_data.py`](phase1/programingData/insert_data.py)**
+<img width="1018" height="447" alt="image" src="https://github.com/user-attachments/assets/e4bcc1e1-9120-4dcc-b9db-28ee4c35f068" />
+<img width="1486" height="656" alt="image" src="https://github.com/user-attachments/assets/d9410b93-70e0-49f1-bbfb-0cf26d4f1cba" />
 
 ---
 
@@ -172,8 +172,8 @@ Backup and restore were executed to ensure data safety and reproducibility.
 - A full backup file was created with date/time naming.
 - Restore was tested on a clean DB instance.
 - Post-restore validation was performed using row-count queries.
-📁 **[Go to Backup Folder](phase1/Backup)**  
-📦 **[View Backup File `backup14_04_2026`](phase1/Backup/backup14_04_2026)**
+  **[Go to Backup Folder](phase1/Backup)**  
+  **[View Backup File `backup14_04_2026`](phase1/Backup/backup14_04_2026)**
 
 <img width="1050" height="830" alt="image" src="https://github.com/user-attachments/assets/04c34005-5214-4de4-87d3-7cfa4428a844" />
 <img width="870" height="397" alt="image" src="https://github.com/user-attachments/assets/3df95fad-846b-4226-9242-d19aac69427c" />
