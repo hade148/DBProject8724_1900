@@ -1,0 +1,703 @@
+{
+  "diagramType": 2,
+  "data": {
+    "nodes": [
+      {
+        "id": "8a599a8b-2024-4429-84b7-2374b691567f",
+        "type": "Table",
+        "position": {
+          "x": 266.9676053056578,
+          "y": 98.70052662174554
+        },
+        "data": {
+          "label": "CUSTOMER",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "4de9b680-ae3e-45ac-9e0d-c9b564f50404",
+              "name": "first_name",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "size": "20"
+            },
+            {
+              "id": "9bc3aeb0-93ba-405c-ad7a-c4ae33f08153",
+              "name": "email",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "size": "50"
+            },
+            {
+              "id": "fb9dc991-b03c-4959-ab96-120f99981522",
+              "name": "phone",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "size": "10"
+            },
+            {
+              "id": "50df6767-d6b2-423b-bea7-44b7a0c779f7",
+              "name": "customer_id ",
+              "type": "INT",
+              "isPrimaryKey": true,
+              "isOptional": false
+            },
+            {
+              "id": "4e6849a2-e802-4b7e-b088-88306758112d",
+              "name": "last_name",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "size": "20"
+            },
+            {
+              "id": "6f1ab8f1-c6b1-4e42-bb14-5dc2cc6a92af",
+              "name": "password",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "size": "20"
+            },
+            {
+              "id": "0747d39b-7c38-4256-ace2-e2ebffe38838",
+              "name": "country",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "size": "20"
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 198
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "60a6eb4d-979f-496b-a637-5c3ae1eb0796",
+        "type": "Table",
+        "position": {
+          "x": -691.0167766565149,
+          "y": -42.28854336431831
+        },
+        "data": {
+          "label": "ATTRACTION",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "e38d9332-62eb-4f00-a710-2451390abd9f",
+              "name": "attraction_id",
+              "type": "INT",
+              "isPrimaryKey": true,
+              "isOptional": false
+            },
+            {
+              "id": "a88f8e55-47c9-4af3-a1de-1d433864e454",
+              "name": "name",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "size": "20"
+            },
+            {
+              "id": "70f4423a-4ff3-4052-896c-6eec8a4bd810",
+              "name": "location",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "size": "20"
+            },
+            {
+              "id": "9015f10a-764e-4aad-8b97-9a6362019503",
+              "name": "description",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "isOptional": true,
+              "size": "1000"
+            },
+            {
+              "id": "75a0f439-975d-47e3-a09b-036b634b6707",
+              "name": "opening_hours",
+              "type": "INT",
+              "isPrimaryKey": false
+            },
+            {
+              "id": "e29f934a-d4ca-4358-9950-5eb79e4b7985",
+              "name": "category",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "size": "20"
+            },
+            {
+              "id": "46287ebc-313b-4f64-ade7-c472c107a3a8",
+              "name": "price",
+              "type": "FLOAT",
+              "isPrimaryKey": false
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 198
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "816cc3a2-fefe-4eb2-b6be-6e1b21b16824",
+        "type": "Table",
+        "position": {
+          "x": -690.9434171245064,
+          "y": 214.28361513564812
+        },
+        "data": {
+          "label": "TICKET",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "cf6cfed0-45d9-47b1-8355-2a56c18fa3a6",
+              "name": "ticket_id",
+              "type": "INT",
+              "isPrimaryKey": true,
+              "isOptional": false
+            },
+            {
+              "id": "cacffac8-a4f6-4556-80de-35ae8a23d60d",
+              "name": "attraction_id",
+              "type": "INT",
+              "isPrimaryKey": false,
+              "isUnique": true
+            },
+            {
+              "id": "6250f59b-77b7-457e-80c1-d07176610294",
+              "name": "price",
+              "type": "FLOAT",
+              "isPrimaryKey": false
+            },
+            {
+              "id": "fd2ff242-7f43-4931-b090-bebdecf3aad3",
+              "name": "valid_date",
+              "type": "DATE",
+              "isPrimaryKey": false
+            },
+            {
+              "id": "e5da53e2-cd47-4eae-b805-741f8d630bc6",
+              "name": "ticket_type",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "size": "20"
+            },
+            {
+              "id": "eaba70ae-2b7f-45d2-93ed-ea80fea2b819",
+              "name": "available_quantity",
+              "type": "INT",
+              "isPrimaryKey": false,
+              "isOptional": true
+            },
+            {
+              "id": "a5729bbd-17da-4d20-89d2-45248979dfb4",
+              "name": "fk_ATTRACTION",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "c03fcdae-7718-4345-b59f-3b6d3b1fc002",
+                "sourceTableId": "60a6eb4d-979f-496b-a637-5c3ae1eb0796",
+                "columns": [
+                  {
+                    "id": "fk_e38d9332-62eb-4f00-a710-2451390abd9f",
+                    "name": "attraction_id",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "isOptional": false
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 199
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "d822eb99-37a1-46ba-8f27-da6c6e33b21d",
+        "type": "Table",
+        "position": {
+          "x": -34.85400037596585,
+          "y": 264.00616598729414
+        },
+        "data": {
+          "label": "BOOKING",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "eb283f1e-fdcb-4411-a639-bb1af891e7c6",
+              "name": "booking_id",
+              "type": "INT",
+              "isPrimaryKey": true,
+              "isOptional": false
+            },
+            {
+              "id": "6b7469e1-457d-4d45-a7e0-180f57370de8",
+              "name": "customer_id",
+              "type": "INT",
+              "isPrimaryKey": false,
+              "isUnique": true
+            },
+            {
+              "id": "3af3aee6-2ccf-4b5a-8e09-b8c0a1224de1",
+              "name": "booking_date",
+              "type": "DATE",
+              "isPrimaryKey": false
+            },
+            {
+              "id": "2cb0664f-82e3-41b4-ab88-069ae2092798",
+              "name": "booking_status",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "isOptional": true,
+              "size": "20"
+            },
+            {
+              "id": "1eef456b-9d61-43f3-bf8e-a696587fbc32",
+              "name": "total_price",
+              "type": "FLOAT",
+              "isPrimaryKey": false
+            },
+            {
+              "id": "562adf67-4af1-44d4-97e9-8a7fec06b7d1",
+              "name": "fk_CUSTOMER",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "d04b7d73-2a34-4669-a4a0-daa561f79d39",
+                "sourceTableId": "8a599a8b-2024-4429-84b7-2374b691567f",
+                "columns": [
+                  {
+                    "id": "fk_50df6767-d6b2-423b-bea7-44b7a0c779f7",
+                    "name": "customer_id ",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "isOptional": false
+            },
+            {
+              "id": "e39a8436-6aaf-4534-8329-47ae3b1e52c8",
+              "name": "fk_PAYMENT",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "a21c7f92-d28b-4bd0-a3aa-f1e9bc0b939c",
+                "sourceTableId": "114ee420-662d-49f4-97a7-9748c1f9393b",
+                "columns": [
+                  {
+                    "id": "fk_4fdad4f9-2539-4877-b0e6-24cc3d812dba",
+                    "name": "payment_id ",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "isOptional": false
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 199
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "660cd32f-3c82-40a2-acc6-b2ddaeebd665",
+        "type": "Table",
+        "position": {
+          "x": -387.65563928803397,
+          "y": -49.68193610331976
+        },
+        "data": {
+          "label": "REVIEW",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "559729fb-07ad-44fe-8e7a-92417b4fae39",
+              "name": "review_id ",
+              "type": "INT",
+              "isPrimaryKey": true,
+              "isOptional": false
+            },
+            {
+              "id": "fe797ac7-f370-4bbf-84f1-e3d840480bc7",
+              "name": "customer_id ",
+              "type": "INT",
+              "isPrimaryKey": false,
+              "isUnique": true
+            },
+            {
+              "id": "228511e3-a797-49ed-8675-5a9a71108cac",
+              "name": "attraction_id ",
+              "type": "INT",
+              "isPrimaryKey": false,
+              "isUnique": true
+            },
+            {
+              "id": "9280a3e0-fbbd-4671-acf8-66acb2bbc334",
+              "name": "rating",
+              "type": "FLOAT",
+              "isPrimaryKey": false
+            },
+            {
+              "id": "75f10952-d9a5-44fc-a6f8-bf4584c90fef",
+              "name": "comment",
+              "type": "VARCHAR(n)",
+              "isPrimaryKey": false,
+              "size": "100"
+            },
+            {
+              "id": "9a4fb97f-8557-4607-af67-590cfc65bc96",
+              "name": "review_date",
+              "type": "DATE",
+              "isPrimaryKey": false
+            },
+            {
+              "id": "80200522-2a7f-4139-807b-9f9362f4bcd1",
+              "name": "fk_CUSTOMER",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "07ef0e0f-1cc1-4f9d-b673-c1ad74aedb3e",
+                "sourceTableId": "8a599a8b-2024-4429-84b7-2374b691567f",
+                "columns": [
+                  {
+                    "id": "fk_50df6767-d6b2-423b-bea7-44b7a0c779f7",
+                    "name": "customer_id ",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "isOptional": false
+            },
+            {
+              "id": "67059498-16c4-4447-a608-cac3a82e225d",
+              "name": "fk_ATTRACTION",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "4c9f2841-7d83-425d-a7a8-c3ccfd3b1381",
+                "sourceTableId": "60a6eb4d-979f-496b-a637-5c3ae1eb0796",
+                "columns": [
+                  {
+                    "id": "fk_e38d9332-62eb-4f00-a710-2451390abd9f",
+                    "name": "attraction_id",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "isOptional": false
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 223
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "114ee420-662d-49f4-97a7-9748c1f9393b",
+        "type": "Table",
+        "position": {
+          "x": -361.40681279272246,
+          "y": 407.3974234561007
+        },
+        "data": {
+          "label": "PAYMENT",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "4fdad4f9-2539-4877-b0e6-24cc3d812dba",
+              "name": "payment_id ",
+              "type": "INT",
+              "isPrimaryKey": true,
+              "isOptional": false
+            },
+            {
+              "id": "85dad01e-8eb8-4aa0-b616-4298a02bb494",
+              "name": "booking_id ",
+              "type": "INT",
+              "isPrimaryKey": false,
+              "isUnique": true
+            },
+            {
+              "id": "cf0d5572-b973-40e4-be51-3fc3902c6b55",
+              "name": "amount",
+              "type": "FLOAT",
+              "isPrimaryKey": false
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 99
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "ca8ceafb-d223-4421-975a-07f4f9993d01",
+        "type": "Table",
+        "position": {
+          "x": -385.9009710286407,
+          "y": 263.0991332390357
+        },
+        "data": {
+          "label": "BOOKINGTICKET",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "fbe14318-d800-4451-b9df-aef08b422a98",
+              "name": "quantity",
+              "type": "INT",
+              "isPrimaryKey": false
+            },
+            {
+              "id": "40d11315-6934-470b-8561-a9e8b4d94966",
+              "name": "fk_BOOKING",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "f08c8aaf-45b6-4560-8df0-ef6489090f74",
+                "sourceTableId": "d822eb99-37a1-46ba-8f27-da6c6e33b21d",
+                "columns": [
+                  {
+                    "id": "fk_eb283f1e-fdcb-4411-a639-bb1af891e7c6",
+                    "name": "booking_id",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "isPrimaryKey": true,
+              "isOptional": false
+            },
+            {
+              "id": "0dd0f706-0b57-4e0e-b14c-ddb0fedf0b9f",
+              "name": "fk_TICKET",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "aac14940-e7e2-4784-b1b1-0c12f56ea764",
+                "sourceTableId": "816cc3a2-fefe-4eb2-b6be-6e1b21b16824",
+                "columns": [
+                  {
+                    "id": "fk_cf6cfed0-45d9-47b1-8355-2a56c18fa3a6",
+                    "name": "ticket_id",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "isPrimaryKey": true,
+              "isOptional": false
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 100
+        },
+        "selected": false,
+        "dragging": false
+      }
+    ],
+    "edges": [
+      {
+        "id": "60a6eb4d-979f-496b-a637-5c3ae1eb0796->816cc3a2-fefe-4eb2-b6be-6e1b21b16824_c03fcdae-7718-4345-b59f-3b6d3b1fc002",
+        "type": "Relational",
+        "source": "60a6eb4d-979f-496b-a637-5c3ae1eb0796",
+        "targetHandle": "foreign-key-handle-c03fcdae-7718-4345-b59f-3b6d3b1fc002",
+        "target": "816cc3a2-fefe-4eb2-b6be-6e1b21b16824",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "c03fcdae-7718-4345-b59f-3b6d3b1fc002",
+            "sourceTableId": "60a6eb4d-979f-496b-a637-5c3ae1eb0796",
+            "columns": [
+              {
+                "id": "fk_e38d9332-62eb-4f00-a710-2451390abd9f",
+                "name": "attraction_id",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "8a599a8b-2024-4429-84b7-2374b691567f->d822eb99-37a1-46ba-8f27-da6c6e33b21d_d04b7d73-2a34-4669-a4a0-daa561f79d39",
+        "type": "Relational",
+        "source": "8a599a8b-2024-4429-84b7-2374b691567f",
+        "targetHandle": "foreign-key-handle-d04b7d73-2a34-4669-a4a0-daa561f79d39",
+        "target": "d822eb99-37a1-46ba-8f27-da6c6e33b21d",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "d04b7d73-2a34-4669-a4a0-daa561f79d39",
+            "sourceTableId": "8a599a8b-2024-4429-84b7-2374b691567f",
+            "columns": [
+              {
+                "id": "fk_50df6767-d6b2-423b-bea7-44b7a0c779f7",
+                "name": "customer_id ",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "114ee420-662d-49f4-97a7-9748c1f9393b->d822eb99-37a1-46ba-8f27-da6c6e33b21d_a21c7f92-d28b-4bd0-a3aa-f1e9bc0b939c",
+        "type": "Relational",
+        "source": "114ee420-662d-49f4-97a7-9748c1f9393b",
+        "targetHandle": "foreign-key-handle-a21c7f92-d28b-4bd0-a3aa-f1e9bc0b939c",
+        "target": "d822eb99-37a1-46ba-8f27-da6c6e33b21d",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "a21c7f92-d28b-4bd0-a3aa-f1e9bc0b939c",
+            "sourceTableId": "114ee420-662d-49f4-97a7-9748c1f9393b",
+            "columns": [
+              {
+                "id": "fk_4fdad4f9-2539-4877-b0e6-24cc3d812dba",
+                "name": "payment_id ",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "8a599a8b-2024-4429-84b7-2374b691567f->660cd32f-3c82-40a2-acc6-b2ddaeebd665_07ef0e0f-1cc1-4f9d-b673-c1ad74aedb3e",
+        "type": "Relational",
+        "source": "8a599a8b-2024-4429-84b7-2374b691567f",
+        "targetHandle": "foreign-key-handle-07ef0e0f-1cc1-4f9d-b673-c1ad74aedb3e",
+        "target": "660cd32f-3c82-40a2-acc6-b2ddaeebd665",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "07ef0e0f-1cc1-4f9d-b673-c1ad74aedb3e",
+            "sourceTableId": "8a599a8b-2024-4429-84b7-2374b691567f",
+            "columns": [
+              {
+                "id": "fk_50df6767-d6b2-423b-bea7-44b7a0c779f7",
+                "name": "customer_id ",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "60a6eb4d-979f-496b-a637-5c3ae1eb0796->660cd32f-3c82-40a2-acc6-b2ddaeebd665_4c9f2841-7d83-425d-a7a8-c3ccfd3b1381",
+        "type": "Relational",
+        "source": "60a6eb4d-979f-496b-a637-5c3ae1eb0796",
+        "targetHandle": "foreign-key-handle-4c9f2841-7d83-425d-a7a8-c3ccfd3b1381",
+        "target": "660cd32f-3c82-40a2-acc6-b2ddaeebd665",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "4c9f2841-7d83-425d-a7a8-c3ccfd3b1381",
+            "sourceTableId": "60a6eb4d-979f-496b-a637-5c3ae1eb0796",
+            "columns": [
+              {
+                "id": "fk_e38d9332-62eb-4f00-a710-2451390abd9f",
+                "name": "attraction_id",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "d822eb99-37a1-46ba-8f27-da6c6e33b21d->ca8ceafb-d223-4421-975a-07f4f9993d01_f08c8aaf-45b6-4560-8df0-ef6489090f74",
+        "type": "Relational",
+        "source": "d822eb99-37a1-46ba-8f27-da6c6e33b21d",
+        "targetHandle": "foreign-key-handle-f08c8aaf-45b6-4560-8df0-ef6489090f74",
+        "target": "ca8ceafb-d223-4421-975a-07f4f9993d01",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "f08c8aaf-45b6-4560-8df0-ef6489090f74",
+            "sourceTableId": "d822eb99-37a1-46ba-8f27-da6c6e33b21d",
+            "columns": [
+              {
+                "id": "fk_eb283f1e-fdcb-4411-a639-bb1af891e7c6",
+                "name": "booking_id",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "816cc3a2-fefe-4eb2-b6be-6e1b21b16824->ca8ceafb-d223-4421-975a-07f4f9993d01_aac14940-e7e2-4784-b1b1-0c12f56ea764",
+        "type": "Relational",
+        "source": "816cc3a2-fefe-4eb2-b6be-6e1b21b16824",
+        "targetHandle": "foreign-key-handle-aac14940-e7e2-4784-b1b1-0c12f56ea764",
+        "target": "ca8ceafb-d223-4421-975a-07f4f9993d01",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "aac14940-e7e2-4784-b1b1-0c12f56ea764",
+            "sourceTableId": "816cc3a2-fefe-4eb2-b6be-6e1b21b16824",
+            "columns": [
+              {
+                "id": "fk_cf6cfed0-45d9-47b1-8355-2a56c18fa3a6",
+                "name": "ticket_id",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "viewport": {
+      "x": 635.1862015539757,
+      "y": 196.96839278877974,
+      "zoom": 0.6405130109822716
+    }
+  },
+  "name": "AttraTicket-Relational Schema",
+  "folder": {
+    "name": "Diagrams",
+    "folderType": 1,
+    "depth": 0,
+    "id": 259349
+  },
+  "id": 350531,
+  "updatedAtTimestamp": 1773958531
+}
