@@ -696,7 +696,7 @@ FROM REVIEW
 WHERE review_date < CURRENT_DATE - INTERVAL '1 year';
 -- Expected: 0
 ```
-<img width="1474" height="448" alt="צילום מסך 2026-04-20 014711" src="https://github.com/user-attachments/assets/65a56bbf-f3f1-42e3-b816-1955130f6a52" />
+<img width="1496" height="486" alt="image" src="https://github.com/user-attachments/assets/d8ef1705-b5a0-48b3-a652-15556814e909" />
 
 ---
 
@@ -741,7 +741,7 @@ FROM BOOKING
 WHERE booking_status = 'Cancelled';
 -- Expected: 0
 ```
-<img width="1482" height="477" alt="צילום מסך 2026-04-20 014826" src="https://github.com/user-attachments/assets/7473181c-c54d-4b27-a88b-e32d86af84e7" />
+<img width="1490" height="492" alt="image" src="https://github.com/user-attachments/assets/a385c4e0-a70e-4024-9406-57a766d27ce6" />
 
 ---
 
@@ -989,7 +989,8 @@ WHERE category = 'Museum'
 ORDER BY attraction_id
 LIMIT 10;
 ```
-<img width="1485" height="654" alt="צילום מסך 2026-04-19 232825" src="https://github.com/user-attachments/assets/de1a4082-d578-463a-821a-bd9b151175de" />  
+<img width="1811" height="788" alt="image" src="https://github.com/user-attachments/assets/53e5bc5a-493d-475e-adfd-13c2ccc9d510" />
+
 
 **Step 5 — Rollback:**
 ```sql
