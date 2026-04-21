@@ -15,6 +15,16 @@
   - [Data Dictionary](#data)
   - [SQL Scripts](#sql-scripts)
   - [Backup & Recovery](#backup--recovery)
+- [Stage 2: Queries and Constraints](#stage-2-queries-and-constraints)
+  - [Introduction](#introduction-1)
+  - [Deliverables](#deliverables)
+  - [SELECT Queries (8 total)](#select-queries-8-total)
+  - [DELETE Queries (3 total)](#delete-queries-3-total)
+  - [UPDATE Queries (3 total)](#update-queries-3-total)
+  - [Constraints (3 via ALTER TABLE)](#constraints-3-via-alter-table)
+  - [Rollback & Commit Demonstrations](#rollback--commit-demonstrations)
+  - [Indexes (3) + Performance Comparison](#indexes-3--performance-comparison)
+  - [Data Dictionary Additions (Motivation/Benefit)](#data-dictionary-additions-motivationbenefit)
 
 ---
 
@@ -69,7 +79,7 @@ The database schema was designed according to **3NF (Third Normal Form)** to red
 Provide the following SQL scripts:
 
 - **Create Tables Script**  
-  **[View Create Tables](phase1/SQLscripts/02-create-tables.sql)**
+  **[View Create Tables](phase1/SQLscripts/02-createTables.sql)**
 
 - **Drop Tables Script**  
   **[View Drop Tables](phase1/SQLscripts/01-dropTables.sql)**
@@ -180,5 +190,150 @@ Backup and restore were executed to ensure data safety and reproducibility.
 the restore:
 <img width="1050" height="601" alt="image" src="https://github.com/user-attachments/assets/364fa4d9-a3a1-4692-b9da-1aa06636da41" />
 <img width="565" height="391" alt="image" src="https://github.com/user-attachments/assets/cde294f5-97bc-4d23-b1d4-ae58a5db1b7b" />
+
+---
+
+## Stage 2: Queries and Constraints
+
+## Introduction
+בשלב זה בוצע תשאול מתקדם של בסיס הנתונים, כולל כתיבת שאילתות מורכבות, עדכונים ומחיקות, עבודה עם טרנזקציות (`ROLLBACK`/`COMMIT`), הוספת אילוצים באמצעות `ALTER TABLE`, והוספת אינדקסים לצורך שיפור ביצועים.
+
+העבודה מותאמת למסכים שהוגדרו במערכת (ניהול לקוחות, ניהול הזמנות, ניהול כרטיסים, דשבורד ניהולי), כך שניתן יהיה לחבר את השאילתות ישירות לשכבת ה-GUI בשלב הסופי.
+
+---
+
+## Deliverables
+
+תיקיית שלב ב בפרויקט:
+
+- **Queries.sql**  
+  [View File](phase2/Queries.sql)
+
+- **Constraints.sql**  
+  [View File](phase2/Constraints.sql)
+
+- **RollbackCommit.sql**  
+  [View File](phase2/RollbackCommit.sql)
+
+- **Index.sql**  
+  [View File](phase2/Index.sql)
+
+- **backup2**  
+  יש להעלות קובץ גיבוי מעודכן בשם `backup2` לתיקיית `phase2`.
+
+---
+
+## SELECT Queries (8 total)
+
+קובץ השאילתות כולל:
+- 4 שאילתות SELECT כפולות (שתי גרסאות לכל שאילתה) עם השוואת יעילות.
+- 4 שאילתות SELECT נוספות ברמת מורכבות לא טריוויאלית.
+- שימוש ב-`JOIN`, `GROUP BY`, `HAVING`, `ORDER BY`, תתי-שאילתות, וניתוח תאריכים (`EXTRACT` יום/חודש/שנה/רבעון).
+
+### 4 שאילתות SELECT כפולות (Dual Form)
+1. Top-Rated Attractions by Category  
+2. Customers Above Monthly Average Spend  
+3. Monthly Revenue Above Average  
+4. Attractions With No Bookings
+
+בכל אחת מהשאילתות הכפולות יש:
+- תיאור בעברית  
+- שתי גרסאות SQL  
+- הסבר מה יעיל יותר ולמה
+
+### 4 שאילתות SELECT נוספות
+5. Full Customer Booking History  
+6. Ticket Availability by Month & Category  
+7. Revenue per Category per Quarter  
+8. Customers Who Reviewed Attractions They Booked
+
+---
+
+## DELETE Queries (3 total)
+
+1. מחיקת כרטיסים שפג תוקפם (עם טיפול בתלויות)  
+2. מחיקת ביקורות ישנות (מעל שנה)  
+3. מחיקת הזמנות מבוטלות ורשומות קשורות
+
+---
+
+## UPDATE Queries (3 total)
+
+1. העלאת מחיר כרטיסים לאטרקציות בביקוש גבוה  
+2. עדכון סטטוס הזמנות `Pending` ל-`Confirmed` בתקופה מוגדרת  
+3. הנחה על אטרקציות בקטגוריית `Museum`
+
+---
+
+## Constraints (3 via ALTER TABLE)
+
+האילוצים נוספו באמצעות `ALTER TABLE` בלבד:
+
+1. `chk_booking_date_not_future` — תאריך הזמנה לא יכול להיות בעתיד  
+2. `chk_ticket_max_quantity` — כמות זמינה מקסימלית לכרטיס  
+3. `chk_attraction_max_price` — מחיר אטרקציה מקסימלי
+
+בנוסף, בוצעו ניסיונות הכנסה שמפרים את האילוץ כדי להראות שגיאת הרצה.
+
+---
+
+## Rollback & Commit Demonstrations
+
+קובץ `RollbackCommit.sql` כולל שני תרחישים מלאים:
+
+1. **ROLLBACK**  
+   עדכון נתונים → הצגת מצב מעודכן → `ROLLBACK` → הצגת מצב קודם (חזרה לקדמותו).
+
+2. **COMMIT**  
+   עדכון נתונים → הצגת מצב מעודכן → `COMMIT` → הצגה נוספת המאשרת שהשינוי נשמר.
+
+---
+
+## Indexes (3) + Performance Comparison
+
+הוספת 3 אינדקסים:
+
+1. `idx_customer_country` על `CUSTOMER(country)`  
+2. `idx_ticket_valid_date` על `TICKET(valid_date)`  
+3. `idx_booking_status` על `BOOKING(booking_status)`
+
+עבור כל אינדקס בוצעו בדיקות `EXPLAIN ANALYZE` לפני ואחרי ההוספה, כולל ניתוח תוצאות והשוואת זמני ריצה.
+
+---
+
+## Data Dictionary Additions (Motivation/Benefit)
+
+לכל אילוץ ולכל אינדקס נוספו הסברים של:
+- **מוטיבציה עסקית/טכנית**
+- **תועלת צפויה**
+- **לאיזה מסך במערכת זה רלוונטי**
+
+הסברים אלה נמצאים בקבצי:
+- [Constraints.sql](phase2/Constraints.sql)
+- [Index.sql](phase2/Index.sql)
+
+---
+
+## Stage 2 Report Submission Notes
+
+לצורך ההגשה הסופית בדו"ח (README):
+
+- עבור כל אחת מ-4 השאילתות הכפולות:  
+  תיאור בעברית + קוד + צילום הרצה + צילום תוצאה (עד 5 שורות) + הסבר יעילות.
+
+- עבור 4 שאילתות SELECT הנוספות:  
+  תיאור בעברית + קוד + צילום הרצה + צילום תוצאה.
+
+- עבור כל UPDATE/DELETE:  
+  תיאור בעברית + צילום לפני + צילום הרצה + צילום אחרי.
+
+- עבור אילוצים:  
+  תיאור שינוי + הרצה + ניסיון קלט שגוי + צילום שגיאה.
+
+- עבור ROLLBACK/COMMIT:  
+  צילום מצב בסיס הנתונים בכל שלב.
+
+- עבור אינדקסים:  
+  צילום/תיעוד זמני ריצה לפני ואחרי + הסבר.
 
 ---
