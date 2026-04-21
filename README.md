@@ -1047,7 +1047,8 @@ WHERE booking_date >= CURRENT_DATE - INTERVAL '60 days'
 ORDER BY booking_id
 LIMIT 10;
 ```
-<img width="1476" height="640" alt="צילום מסך 2026-04-19 233329" src="https://github.com/user-attachments/assets/30f92a6c-d970-45e7-b621-43617e14c7b2" />  
+<img width="1811" height="788" alt="צילום מסך 2026-04-22 004721" src="https://github.com/user-attachments/assets/0717cea0-978f-4688-a353-e8bf7751b3de" />
+
 
 **Step 5 — Commit:**
 ```sql
