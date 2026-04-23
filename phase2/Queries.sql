@@ -1,26 +1,11 @@
--- ============================================================================
 -- AttraTicket - Phase 2: Queries
--- ============================================================================
--- This file contains:
---   8 SELECT queries (4 with dual forms + 4 additional)
---   3 DELETE queries
---   3 UPDATE queries
--- ============================================================================
--- Database: PostgreSQL (AttraTicket)
--- ============================================================================
+-- Contains: 8 SELECT queries (4 with dual forms), 3 DELETE queries, 3 UPDATE queries
 
--- ############################################################################
---                        SELECT QUERIES (Dual Forms)
--- ############################################################################
+-- ============================================================
+-- SELECT QUERIES (Dual Forms)
+-- ============================================================
 
--- ============================================================================
--- QUERY 1: Top-Rated Attractions by Category with Number of Bookings
--- Description (Hebrew): עבור כל קטגוריה, מצא את האטרקציות עם דירוג ממוצע גבוה
---   מ-4, והצג את מספר ההזמנות שלהן, ממוין לפי דירוג ממוצע בסדר יורד.
--- Purpose: Helps business managers identify the best-performing attractions
---   in each category for marketing and resource allocation.
--- ============================================================================
-
+-- Query 1: Top-rated attractions (avg >= 4) with booking count, per category
 -- Version A: Using JOINs
 SELECT 
     a.name AS attraction_name,
@@ -54,26 +39,15 @@ ORDER BY avg_rating DESC, total_bookings DESC;
 
 /*
  Efficiency Analysis (Query 1):
- Version A (JOINs) is generally MORE EFFICIENT because:
- - The query optimizer can process all joins in a single pass using hash joins or merge joins.
- - Aggregation (GROUP BY + HAVING) is computed once.
- 
- Version B (Subqueries) is LESS EFFICIENT because:
- - Each correlated subquery in the SELECT and WHERE clauses runs once PER ROW in ATTRACTION.
- - For N attractions, the REVIEW subquery runs N times for filtering + N times for display,
-   and the BOOKINGTICKET subquery runs N times, resulting in ~3N subquery executions.
+ Version A (JOINs) is MORE EFFICIENT: all joins are processed in a single pass,
+ and aggregation is computed once.
+ Version B (Subqueries) is LESS EFFICIENT: each correlated subquery runs once
+ per row (~3N subquery executions for N attractions).
 */
 
--- ============================================================================
--- QUERY 2: Customers Who Spent Above the Monthly Average for Their Booking Month
--- Description (Hebrew): מצא את כל הלקוחות שסכום ההזמנה שלהם גבוה מהממוצע של
---   החודש שבו הם ביצעו את ההזמנה. הצג שם, מדינה, תאריך מפורק, סכום, סטטוס ותשלום.
--- Purpose: Identify high-value customers relative to their booking month's average
---   for seasonal loyalty programs and targeted marketing.
--- ============================================================================
-
--- Version A: Using JOIN with Derived Table (EFFICIENT)
--- Pre-computes monthly averages ONCE in a derived table, then JOINs.
+-- ============================================================
+-- Query 2: Customers who spent above their booking month's average
+-- Version A: JOIN with derived table (pre-computes monthly averages once)
 SELECT 
     c.first_name || ' ' || c.last_name AS full_name,
     c.country,
@@ -99,8 +73,7 @@ JOIN (
 WHERE b.total_price > ma.avg_monthly_price
 ORDER BY b.total_price DESC;
 
--- Version B: Using Correlated Subquery (LESS EFFICIENT)
--- Recalculates the monthly average for EVERY row individually.
+-- Version B: Correlated subquery (recalculates monthly average per row)
 SELECT 
     c.first_name || ' ' || c.last_name AS full_name,
     c.country,
@@ -128,28 +101,15 @@ ORDER BY b.total_price DESC;
 
 /*
  Efficiency Analysis (Query 2):
- Version A (JOIN with Derived Table) is MORE EFFICIENT because:
- - The derived table computes the monthly averages in a SINGLE PASS over the BOOKING table.
- - The result is a small table (one row per month/year), which is then joined efficiently
-   using hash join or merge join.
- - Total scans of BOOKING: 2 (one for the derived table, one for the main query).
-
- Version B (Correlated Subquery) is LESS EFFICIENT because:
- - The correlated subquery in WHERE recalculates the monthly average for EACH ROW
-   in the outer query. For N bookings, it performs N additional scans of BOOKING.
- - Additionally, the correlated subquery in SELECT runs another N scans for display.
- - Total scans of BOOKING: up to 2N + 1 (main scan + N for WHERE filter + N for display).
- - For a table with 10,000 bookings, this means ~20,001 scans vs just 2 scans in Version A.
+ Version A (derived table): BOOKING scanned twice total (once for the derived table,
+ once for the main query).
+ Version B (correlated subquery): BOOKING scanned up to 2N+1 times for N bookings
+ (N for the WHERE filter + N for the SELECT display + 1 main scan).
 */
 
--- ============================================================================
--- QUERY 3: Monthly Revenue Analysis - Months with Revenue Above Category Average
--- Description (Hebrew): הצג ניתוח הכנסות חודשי - מצא את החודשים שבהם ההכנסה
---   הכוללת מהזמנות גבוהה מהממוצע החודשי, כולל מספר ההזמנות ומחיר ממוצע.
--- Purpose: Financial reporting for business managers to identify peak months.
--- ============================================================================
-
--- Version A: Using HAVING with subquery
+-- ============================================================
+-- Query 3: Months with total revenue above the monthly average
+-- Version A: HAVING with nested subquery
 SELECT 
     EXTRACT(YEAR FROM b.booking_date) AS year,
     EXTRACT(MONTH FROM b.booking_date) AS month,
@@ -167,7 +127,7 @@ HAVING SUM(b.total_price) > (
 )
 ORDER BY year, month;
 
--- Version B: Using CTE + WHERE filter (derived table)
+-- Version B: CTE + WHERE filter
 WITH monthly_revenue AS (
     SELECT 
         EXTRACT(YEAR FROM b.booking_date) AS year,
@@ -194,26 +154,14 @@ ORDER BY mr.year, mr.month;
 
 /*
  Efficiency Analysis (Query 3):
- Version B (CTE) is MORE EFFICIENT because:
- - The monthly aggregation is computed ONCE and reused both for the result set and for 
-   computing the average.
- - Version A computes the monthly aggregation TWICE: once in the main query and once 
-   inside the HAVING subquery.
- - For large datasets, avoiding the duplicate GROUP BY scan can save significant I/O.
- 
- Version A is simpler to read for simple cases but duplicates computation.
+ Version B (CTE) is MORE EFFICIENT: the monthly aggregation is computed once
+ and reused for both result and average calculation.
+ Version A computes the GROUP BY twice (main query + HAVING subquery).
 */
 
--- ============================================================================
--- QUERY 4: Attractions That Have No Bookings (through the ticket→bookingticket chain)
--- Description (Hebrew): מצא את כל האטרקציות שאין להן אף הזמנה (דרך שרשרת
---   כרטיס→הזמנת_כרטיס). הצג שם אטרקציה, קטגוריה, מיקום, מחיר, ושעות פתיחה.
--- Purpose: Help managers identify attractions with zero demand that need
---   marketing campaigns or pricing adjustments (Attraction Management screen).
--- ============================================================================
-
--- Version A: Using LEFT JOIN chain with IS NULL (EFFICIENT)
--- The optimizer converts the LEFT JOIN + IS NULL into an anti-join, processed in one pass.
+-- ============================================================
+-- Query 4: Attractions with no bookings (via ticket -> bookingticket chain)
+-- Version A: LEFT JOIN + IS NULL (anti-join, single pass)
 SELECT 
     a.attraction_id,
     a.name AS attraction_name,
@@ -227,8 +175,7 @@ LEFT JOIN BOOKINGTICKET bt ON t.ticket_id = bt.ticket_id
 WHERE bt.booking_id IS NULL
 ORDER BY a.category, a.price DESC;
 
--- Version B: Using NOT IN with Nested Subqueries (LESS EFFICIENT)
--- Forces full materialization of each subquery level before filtering.
+-- Version B: NOT IN with nested subqueries (materializes each subquery level)
 SELECT 
     a.attraction_id,
     a.name AS attraction_name,
@@ -249,36 +196,19 @@ ORDER BY a.category, a.price DESC;
 
 /*
  Efficiency Analysis (Query 4):
- Version A (LEFT JOIN + IS NULL) is MORE EFFICIENT because:
- - PostgreSQL converts the LEFT JOIN + IS NULL pattern into an optimized anti-join.
- - The entire join chain is processed in a SINGLE PASS using hash anti-join,
-   meaning each table is scanned only once.
- - The optimizer can pipeline the results without materializing intermediate sets.
-
- Version B (NOT IN with nested subqueries) is LESS EFFICIENT because:
- - Each NOT IN / IN subquery must be FULLY MATERIALIZED before it can be used
-   by the outer query. The inner subquery scans BOOKINGTICKET fully, produces a
-   list, then the middle query scans TICKET fully, and finally ATTRACTION is filtered.
- - NOT IN has additional overhead for NULL-safety: PostgreSQL must check every value
-   in the subquery result to verify none are NULL before it can exclude a row.
-   If any value IS NULL, the entire NOT IN evaluates to UNKNOWN (no rows returned).
- - NOT IN cannot short-circuit — it must compare against ALL values in the list,
-   whereas the anti-join in Version A stops as soon as a match is found.
- - For large tables, the materialization overhead of NOT IN significantly increases
-   memory usage and execution time compared to the streaming anti-join approach.
+ Version A (LEFT JOIN + IS NULL): PostgreSQL converts this to an optimized
+ hash anti-join — each table is scanned only once.
+ Version B (NOT IN): each subquery is fully materialized before use.
+ NOT IN also has NULL-safety overhead and cannot short-circuit, making it
+ significantly slower on large tables.
 */
 
 
--- ############################################################################
---                    ADDITIONAL SELECT QUERIES (4 more)
--- ############################################################################
+-- ============================================================
+-- ADDITIONAL SELECT QUERIES
+-- ============================================================
 
--- ============================================================================
--- QUERY 5: Full Customer Booking History with Ticket and Attraction Details
--- Description (Hebrew): הצג את היסטוריית ההזמנות המלאה של הלקוחות, כולל פרטי
---   הכרטיסים, שם האטרקציה, ותאריך ההזמנה מפורק ליום, חודש ושנה.
--- Purpose: Customer service screen - view complete booking trail for a customer.
--- ============================================================================
+-- Query 5: Full customer booking history with ticket and attraction details
 SELECT 
     c.first_name || ' ' || c.last_name AS customer_name,
     c.email,
@@ -302,12 +232,7 @@ JOIN TICKET t ON bt.ticket_id = t.ticket_id
 JOIN ATTRACTION a ON t.attraction_id = a.attraction_id
 ORDER BY b.booking_date DESC, c.last_name;
 
--- ============================================================================
--- QUERY 6: Ticket Availability Analysis by Month and Category
--- Description (Hebrew): ניתוח זמינות כרטיסים לפי חודש תוקף וקטגוריית אטרקציה,
---   כולל סה"כ כרטיסים זמינים, מחיר ממוצע, ומספר סוגי כרטיסים.
--- Purpose: Inventory management screen - plan ticket stock per season/category.
--- ============================================================================
+-- Query 6: Ticket availability by month and attraction category
 SELECT 
     a.category,
     EXTRACT(MONTH FROM t.valid_date) AS valid_month,
@@ -323,12 +248,7 @@ GROUP BY a.category, EXTRACT(MONTH FROM t.valid_date), EXTRACT(YEAR FROM t.valid
 HAVING SUM(t.available_quantity) > 0
 ORDER BY valid_year, valid_month, a.category;
 
--- ============================================================================
--- QUERY 7: Revenue Per Attraction Category Per Quarter
--- Description (Hebrew): הכנסות לפי קטגוריית אטרקציה לפי רבעון - מצא את הרבעון
---   הרווחי ביותר לכל קטגוריה, כולל מספר הזמנות וממוצע הכנסה להזמנה.
--- Purpose: Executive dashboard - quarterly revenue breakdown by category.
--- ============================================================================
+-- Query 7: Revenue per attraction category per quarter
 SELECT 
     a.category,
     EXTRACT(YEAR FROM b.booking_date) AS year,
@@ -343,12 +263,7 @@ JOIN BOOKING b ON bt.booking_id = b.booking_id
 GROUP BY a.category, EXTRACT(YEAR FROM b.booking_date), EXTRACT(QUARTER FROM b.booking_date)
 ORDER BY year, quarter, total_revenue DESC;
 
--- ============================================================================
--- QUERY 8: Customers Who Reviewed Attractions They Booked (Cross-Reference)
--- Description (Hebrew): מצא לקוחות שגם הזמינו וגם כתבו ביקורת על אטרקציה,
---   הצג פרטי הלקוח, דירוג, תאריך הביקורת מפורק, והמחיר ששילם.
--- Purpose: Customer engagement screen - match bookings with feedback for quality insights.
--- ============================================================================
+-- Query 8: Customers who reviewed an attraction they also booked
 SELECT 
     c.first_name || ' ' || c.last_name AS customer_name,
     c.email,
@@ -371,21 +286,12 @@ JOIN TICKET t ON bt.ticket_id = t.ticket_id AND t.attraction_id = a.attraction_i
 ORDER BY r.rating DESC, r.review_date DESC;
 
 
--- ############################################################################
---                          DELETE QUERIES (3)
--- ############################################################################
+-- ============================================================
+-- DELETE QUERIES
+-- ============================================================
 
--- ============================================================================
--- DELETE 1: Delete Tickets That Have Expired (valid_date in the past)
--- Description (Hebrew): מחק כרטיסים שתאריך התוקף שלהם עבר ושלא שייכים להזמנה
---   פעילה (מסך ניהול כרטיסים - ניקוי כרטיסים ישנים).
--- ============================================================================
-
--- First, show data before delete:
--- SELECT t.ticket_id, t.valid_date, a.name 
--- FROM TICKET t JOIN ATTRACTION a ON t.attraction_id = a.attraction_id
--- WHERE t.valid_date < CURRENT_DATE;
-
+-- Delete 1: Remove expired tickets not linked to any active confirmed booking
+-- Step 1: Remove BookingTicket entries for expired tickets
 DELETE FROM BOOKINGTICKET
 WHERE ticket_id IN (
     SELECT t.ticket_id 
@@ -398,79 +304,34 @@ WHERE ticket_id IN (
     )
 );
 
+-- Step 2: Remove the expired tickets themselves
 DELETE FROM TICKET
 WHERE valid_date < CURRENT_DATE
 AND ticket_id NOT IN (
     SELECT bt.ticket_id FROM BOOKINGTICKET bt
 );
 
--- After delete, verify:
--- SELECT COUNT(*) FROM TICKET WHERE valid_date < CURRENT_DATE;
-
--- ============================================================================
--- DELETE 2: Delete Reviews Older Than 1 Year
--- Description (Hebrew): מחק ביקורות שנכתבו לפני יותר משנה - ניקוי ביקורות
---   ישנות שכבר לא רלוונטיות (מסך ניהול ביקורות).
--- ============================================================================
-
--- First, show data before delete:
--- SELECT r.review_id, r.review_date, r.rating, c.first_name, a.name
--- FROM REVIEW r 
--- JOIN CUSTOMER c ON r.customer_id = c.customer_id
--- JOIN ATTRACTION a ON r.attraction_id = a.attraction_id
--- WHERE r.review_date < CURRENT_DATE - INTERVAL '1 year';
-
+-- Delete 2: Remove reviews older than 1 year
 DELETE FROM REVIEW
 WHERE review_date < CURRENT_DATE - INTERVAL '1 year';
 
--- After delete, verify:
--- SELECT COUNT(*) FROM REVIEW WHERE review_date < CURRENT_DATE - INTERVAL '1 year';
-
--- ============================================================================
--- DELETE 3: Delete Cancelled Bookings and Their Related BookingTickets
--- Description (Hebrew): מחק הזמנות שבוטלו (סטטוס 'Cancelled') יחד עם כרטיסי
---   ההזמנה המשויכים אליהם (מסך ניהול הזמנות - ניקוי הזמנות מבוטלות).
--- ============================================================================
-
--- First, show data before delete:
--- SELECT b.booking_id, b.booking_status, b.booking_date, c.first_name || ' ' || c.last_name AS customer
--- FROM BOOKING b 
--- JOIN CUSTOMER c ON b.customer_id = c.customer_id
--- WHERE b.booking_status = 'Cancelled';
-
--- Step 1: Delete related booking tickets
+-- Delete 3: Remove cancelled bookings and their related booking tickets
+-- Step 1: Remove related booking tickets
 DELETE FROM BOOKINGTICKET
 WHERE booking_id IN (
     SELECT b.booking_id FROM BOOKING b WHERE b.booking_status = 'Cancelled'
 );
 
--- Step 2: Delete the cancelled bookings (must also handle PAYMENT FK)
--- First save payment_ids to delete later
+-- Step 2: Remove the cancelled bookings
 DELETE FROM BOOKING
 WHERE booking_status = 'Cancelled';
 
--- After delete, verify:
--- SELECT COUNT(*) FROM BOOKING WHERE booking_status = 'Cancelled';
 
+-- ============================================================
+-- UPDATE QUERIES
+-- ============================================================
 
--- ############################################################################
---                          UPDATE QUERIES (3)
--- ############################################################################
-
--- ============================================================================
--- UPDATE 1: Increase Ticket Prices by 10% for High-Demand Attractions
--- Description (Hebrew): העלה את מחיר הכרטיסים ב-10% לאטרקציות שיש להן יותר
---   מ-2 הזמנות (ביקוש גבוה). מסך ניהול תמחור.
--- ============================================================================
-
--- Before update:
--- SELECT t.ticket_id, a.name, t.price, t.ticket_type
--- FROM TICKET t JOIN ATTRACTION a ON t.attraction_id = a.attraction_id
--- WHERE t.ticket_id IN (
---     SELECT bt.ticket_id FROM BOOKINGTICKET bt
---     GROUP BY bt.ticket_id HAVING COUNT(*) >= 2
--- );
-
+-- Update 1: Increase ticket prices by 10% for high-demand tickets (>= 2 bookings)
 UPDATE TICKET
 SET price = ROUND((price * 1.10)::numeric, 2)
 WHERE ticket_id IN (
@@ -480,49 +341,13 @@ WHERE ticket_id IN (
     HAVING COUNT(bt.booking_id) >= 2
 );
 
--- After update:
--- SELECT t.ticket_id, a.name, t.price, t.ticket_type
--- FROM TICKET t JOIN ATTRACTION a ON t.attraction_id = a.attraction_id;
-
--- ============================================================================
--- UPDATE 2: Set Booking Status to 'Confirmed' for Bookings from the Last 30 Days
---           That Are Still 'Pending'
--- Description (Hebrew): עדכן את סטטוס ההזמנה ל-'Confirmed' עבור הזמנות מ-30 הימים
---   האחרונים שעדיין בסטטוס 'Pending'. מסך ניהול הזמנות.
--- ============================================================================
-
--- Before update:
--- SELECT b.booking_id, c.first_name || ' ' || c.last_name AS customer,
---        b.booking_date, b.booking_status
--- FROM BOOKING b JOIN CUSTOMER c ON b.customer_id = c.customer_id
--- WHERE b.booking_status = 'Pending' 
---   AND b.booking_date >= CURRENT_DATE - INTERVAL '30 days';
-
+-- Update 2: Confirm 'Pending' bookings from the last 30 days
 UPDATE BOOKING
 SET booking_status = 'Confirmed'
 WHERE booking_status = 'Pending'
   AND booking_date >= CURRENT_DATE - INTERVAL '30 days';
 
--- After update:
--- SELECT b.booking_id, c.first_name || ' ' || c.last_name AS customer,
---        b.booking_date, b.booking_status
--- FROM BOOKING b JOIN CUSTOMER c ON b.customer_id = c.customer_id
--- WHERE b.booking_date >= CURRENT_DATE - INTERVAL '30 days';
-
--- ============================================================================
--- UPDATE 3: Apply 15% Discount on All Attractions in 'Museum' Category
--- Description (Hebrew): החל הנחה של 15% על כל האטרקציות בקטגוריית 'Museum'.
---   מסך ניהול אטרקציות - מבצעים וקידום מכירות.
--- ============================================================================
-
--- Before update:
--- SELECT a.attraction_id, a.name, a.category, a.price, a.location
--- FROM ATTRACTION a WHERE a.category = 'Museum';
-
+-- Update 3: Apply 15% discount on all 'Museum' category attractions
 UPDATE ATTRACTION
 SET price = ROUND((price * 0.85)::numeric, 2)
 WHERE category = 'Museum';
-
--- After update:
--- SELECT a.attraction_id, a.name, a.category, a.price, a.location
--- FROM ATTRACTION a WHERE a.category = 'Museum';
