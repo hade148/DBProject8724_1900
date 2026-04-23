@@ -83,8 +83,7 @@ SELECT
     EXTRACT(YEAR FROM b.booking_date) AS booking_year,
     b.total_price,
     ROUND(ma.avg_monthly_price::numeric, 2) AS month_avg,
-    b.booking_status,
-    p.amount AS payment_amount
+    b.booking_status
 FROM CUSTOMER c
 JOIN BOOKING b ON c.customer_id = b.customer_id
 JOIN PAYMENT p ON b.payment_id = p.payment_id
@@ -115,8 +114,7 @@ SELECT
      WHERE EXTRACT(MONTH FROM b3.booking_date) = EXTRACT(MONTH FROM b.booking_date)
        AND EXTRACT(YEAR FROM b3.booking_date) = EXTRACT(YEAR FROM b.booking_date)
     ) AS month_avg,
-    b.booking_status,
-    p.amount AS payment_amount
+    b.booking_status
 FROM CUSTOMER c
 JOIN BOOKING b ON c.customer_id = b.customer_id
 JOIN PAYMENT p ON b.payment_id = p.payment_id
