@@ -1,75 +1,30 @@
--- AttraTicket - Phase 2: Indexes
--- Creates 3 indexes with EXPLAIN ANALYZE before and after each one.
---
--- Existing indexes (Phase 1):
---   idx_booking_booking_date          ON booking(booking_date)
---   idx_bookingticket_ticket_id       ON bookingticket(ticket_id)
---   idx_review_attraction_review_date ON review(attraction_id, review_date DESC)
---
--- New indexes created here:
---   idx_customer_country  ON customer(country)
---   idx_ticket_valid_date ON ticket(valid_date)
---   idx_booking_status    ON booking(booking_status)
+-- AttraTicket - Phase 2: Indexes | 3 indexes with EXPLAIN ANALYZE before/after
 
--- ============================================================
--- Index 1: CUSTOMER.country
--- Rationale: Country-based filtering and aggregation are common in
---            analytics queries. Without an index, every such query
---            performs a full sequential scan.
--- ============================================================
-
--- Before
+-- Index 1: customer(country) — speeds up country-based filtering
 EXPLAIN ANALYZE
-SELECT 
-    c.country,
-    COUNT(*) AS num_customers,
+SELECT c.country, COUNT(*) AS num_customers,
     COUNT(DISTINCT b.booking_id) AS num_bookings,
     ROUND(AVG(b.total_price)::numeric, 2) AS avg_spending
 FROM CUSTOMER c
 LEFT JOIN BOOKING b ON c.customer_id = b.customer_id
 WHERE c.country IN ('Israel', 'USA', 'France')
-GROUP BY c.country
-ORDER BY num_bookings DESC;
+GROUP BY c.country ORDER BY num_bookings DESC;
 
 CREATE INDEX idx_customer_country ON CUSTOMER(country);
 
--- After
 EXPLAIN ANALYZE
-SELECT 
-    c.country,
-    COUNT(*) AS num_customers,
+SELECT c.country, COUNT(*) AS num_customers,
     COUNT(DISTINCT b.booking_id) AS num_bookings,
     ROUND(AVG(b.total_price)::numeric, 2) AS avg_spending
 FROM CUSTOMER c
 LEFT JOIN BOOKING b ON c.customer_id = b.customer_id
 WHERE c.country IN ('Israel', 'USA', 'France')
-GROUP BY c.country
-ORDER BY num_bookings DESC;
+GROUP BY c.country ORDER BY num_bookings DESC;
 
-/*
- Expected:
- BEFORE: Sequential Scan on CUSTOMER (all rows read, then filtered).
- AFTER:  Bitmap Index Scan on idx_customer_country — only matching rows
-         are read. Speedup depends on selectivity (2-10x typical).
-*/
-
-
--- ============================================================
--- Index 2: TICKET.valid_date
--- Rationale: Many operations filter tickets by date range (finding
---            expired tickets, cleanup DELETE, availability queries).
--- ============================================================
-
--- Before
+-- Index 2: ticket(valid_date) — speeds up date-range filters and expiry cleanup
 EXPLAIN ANALYZE
-SELECT 
-    t.ticket_id,
-    a.name AS attraction_name,
-    a.category,
-    t.ticket_type,
-    t.price,
-    t.valid_date,
-    t.available_quantity
+SELECT t.ticket_id, a.name AS attraction_name, a.category,
+    t.ticket_type, t.price, t.valid_date, t.available_quantity
 FROM TICKET t
 JOIN ATTRACTION a ON t.attraction_id = a.attraction_id
 WHERE t.valid_date BETWEEN '2026-04-01' AND '2026-06-30'
@@ -77,47 +32,18 @@ ORDER BY t.valid_date;
 
 CREATE INDEX idx_ticket_valid_date ON TICKET(valid_date);
 
--- After
 EXPLAIN ANALYZE
-SELECT 
-    t.ticket_id,
-    a.name AS attraction_name,
-    a.category,
-    t.ticket_type,
-    t.price,
-    t.valid_date,
-    t.available_quantity
+SELECT t.ticket_id, a.name AS attraction_name, a.category,
+    t.ticket_type, t.price, t.valid_date, t.available_quantity
 FROM TICKET t
 JOIN ATTRACTION a ON t.attraction_id = a.attraction_id
 WHERE t.valid_date BETWEEN '2026-04-01' AND '2026-06-30'
 ORDER BY t.valid_date;
 
-/*
- Expected:
- BEFORE: Sequential Scan on TICKET — all rows read for date range filter.
- AFTER:  Index Scan on idx_ticket_valid_date — B-tree navigates directly
-         to the date range start. Also eliminates the Sort step for
-         ORDER BY valid_date (dual benefit: filter + sort elimination).
-*/
-
-
--- ============================================================
--- Index 3: BOOKING.booking_status
--- Rationale: DELETE/UPDATE queries in Phase 2 filter by status
---            ('Cancelled', 'Pending'). Without an index, every
---            such query scans the entire booking table.
--- ============================================================
-
--- Before
+-- Index 3: booking(booking_status) — avoids full scan on DELETE/UPDATE by status
 EXPLAIN ANALYZE
-SELECT 
-    b.booking_id,
-    c.first_name || ' ' || c.last_name AS customer_name,
-    c.email,
-    b.booking_date,
-    b.booking_status,
-    b.total_price,
-    p.amount AS payment_amount
+SELECT b.booking_id, c.first_name || ' ' || c.last_name AS customer_name,
+    c.email, b.booking_date, b.booking_status, b.total_price, p.amount AS payment_amount
 FROM BOOKING b
 JOIN CUSTOMER c ON b.customer_id = c.customer_id
 JOIN PAYMENT p ON b.payment_id = p.payment_id
@@ -126,26 +52,11 @@ ORDER BY b.booking_date DESC;
 
 CREATE INDEX idx_booking_status ON BOOKING(booking_status);
 
--- After
 EXPLAIN ANALYZE
-SELECT 
-    b.booking_id,
-    c.first_name || ' ' || c.last_name AS customer_name,
-    c.email,
-    b.booking_date,
-    b.booking_status,
-    b.total_price,
-    p.amount AS payment_amount
+SELECT b.booking_id, c.first_name || ' ' || c.last_name AS customer_name,
+    c.email, b.booking_date, b.booking_status, b.total_price, p.amount AS payment_amount
 FROM BOOKING b
 JOIN CUSTOMER c ON b.customer_id = c.customer_id
 JOIN PAYMENT p ON b.payment_id = p.payment_id
 WHERE b.booking_status = 'CANCELLED'
 ORDER BY b.booking_date DESC;
-
-/*
- Expected:
- BEFORE: Sequential Scan on BOOKING — every row checked for status filter.
- AFTER:  Index Scan on idx_booking_status — only 'CANCELLED' rows fetched.
-         If 'CANCELLED' is ~20% of bookings, ~80% fewer rows are read.
-         Critical for the DELETE of cancelled bookings as the table grows.
-*/

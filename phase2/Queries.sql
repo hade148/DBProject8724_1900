@@ -1,12 +1,5 @@
--- AttraTicket - Phase 2: Queries
--- Contains: 8 SELECT queries (4 with dual forms), 3 DELETE queries, 3 UPDATE queries
-
--- ============================================================
--- SELECT QUERIES (Dual Forms)
--- ============================================================
-
 -- Query 1: Top-rated attractions (avg >= 4) with booking count, per category
--- Version A: Using JOINs
+-- Version A: JOINs
 SELECT 
     a.name AS attraction_name,
     a.category,
@@ -21,7 +14,7 @@ GROUP BY a.attraction_id, a.name, a.category, a.location
 HAVING AVG(r.rating) >= 4.0
 ORDER BY avg_rating DESC, total_bookings DESC;
 
--- Version B: Using Subqueries
+-- Version B: Correlated subqueries
 SELECT 
     a.name AS attraction_name,
     a.category,
@@ -37,17 +30,12 @@ FROM ATTRACTION a
 WHERE (SELECT AVG(r2.rating) FROM REVIEW r2 WHERE r2.attraction_id = a.attraction_id) >= 4.0
 ORDER BY avg_rating DESC, total_bookings DESC;
 
-/*
- Efficiency Analysis (Query 1):
- Version A (JOINs) is MORE EFFICIENT: all joins are processed in a single pass,
- and aggregation is computed once.
- Version B (Subqueries) is LESS EFFICIENT: each correlated subquery runs once
- per row (~3N subquery executions for N attractions).
-*/
+-- Efficiency: Version A (JOINs) is faster — single aggregation pass.
+--             Version B runs ~3N correlated subqueries for N attractions.
 
 -- ============================================================
 -- Query 2: Customers who spent above their booking month's average
--- Version A: JOIN with derived table (pre-computes monthly averages once)
+-- Version A: JOIN with derived table (monthly averages computed once)
 SELECT 
     c.first_name || ' ' || c.last_name AS full_name,
     c.country,
@@ -99,13 +87,8 @@ WHERE b.total_price > (
 )
 ORDER BY b.total_price DESC;
 
-/*
- Efficiency Analysis (Query 2):
- Version A (derived table): BOOKING scanned twice total (once for the derived table,
- once for the main query).
- Version B (correlated subquery): BOOKING scanned up to 2N+1 times for N bookings
- (N for the WHERE filter + N for the SELECT display + 1 main scan).
-*/
+-- Efficiency: Version A scans BOOKING twice total.
+--             Version B scans BOOKING up to 2N+1 times for N rows.
 
 -- ============================================================
 -- Query 3: Months with total revenue above the monthly average
@@ -152,16 +135,12 @@ CROSS JOIN avg_monthly am
 WHERE mr.total_revenue > am.avg_rev
 ORDER BY mr.year, mr.month;
 
-/*
- Efficiency Analysis (Query 3):
- Version B (CTE) is MORE EFFICIENT: the monthly aggregation is computed once
- and reused for both result and average calculation.
- Version A computes the GROUP BY twice (main query + HAVING subquery).
-*/
+-- Efficiency: Version B (CTE) is faster — aggregation computed once, reused.
+--             Version A computes GROUP BY twice (main query + HAVING subquery).
 
 -- ============================================================
 -- Query 4: Attractions with no bookings (via ticket -> bookingticket chain)
--- Version A: LEFT JOIN + IS NULL (anti-join, single pass)
+-- Version A: LEFT JOIN + IS NULL (hash anti-join, single pass)
 SELECT 
     a.attraction_id,
     a.name AS attraction_name,
@@ -175,7 +154,7 @@ LEFT JOIN BOOKINGTICKET bt ON t.ticket_id = bt.ticket_id
 WHERE bt.booking_id IS NULL
 ORDER BY a.category, a.price DESC;
 
--- Version B: NOT IN with nested subqueries (materializes each subquery level)
+-- Version B: NOT IN with nested subqueries (materializes each level)
 SELECT 
     a.attraction_id,
     a.name AS attraction_name,
@@ -194,19 +173,8 @@ WHERE a.attraction_id NOT IN (
 )
 ORDER BY a.category, a.price DESC;
 
-/*
- Efficiency Analysis (Query 4):
- Version A (LEFT JOIN + IS NULL): PostgreSQL converts this to an optimized
- hash anti-join — each table is scanned only once.
- Version B (NOT IN): each subquery is fully materialized before use.
- NOT IN also has NULL-safety overhead and cannot short-circuit, making it
- significantly slower on large tables.
-*/
-
-
--- ============================================================
--- ADDITIONAL SELECT QUERIES
--- ============================================================
+-- Efficiency: Version A is faster — optimized hash anti-join, each table scanned once.
+--             Version B fully materializes subqueries; NOT IN adds NULL-safety overhead.
 
 -- Query 5: Full customer booking history with ticket and attraction details
 SELECT 
@@ -285,12 +253,7 @@ JOIN BOOKINGTICKET bt ON b.booking_id = bt.booking_id
 JOIN TICKET t ON bt.ticket_id = t.ticket_id AND t.attraction_id = a.attraction_id
 ORDER BY r.rating DESC, r.review_date DESC;
 
-
--- ============================================================
--- DELETE QUERIES
--- ============================================================
-
--- Delete 1: Remove expired tickets not linked to any active confirmed booking
+-- Delete 1: Remove expired tickets not linked to any confirmed booking
 -- Step 1: Remove BookingTicket entries for expired tickets
 DELETE FROM BOOKINGTICKET
 WHERE ticket_id IN (
@@ -325,11 +288,6 @@ WHERE booking_id IN (
 -- Step 2: Remove the cancelled bookings
 DELETE FROM BOOKING
 WHERE booking_status = 'Cancelled';
-
-
--- ============================================================
--- UPDATE QUERIES
--- ============================================================
 
 -- Update 1: Increase ticket prices by 10% for high-demand tickets (>= 2 bookings)
 UPDATE TICKET
