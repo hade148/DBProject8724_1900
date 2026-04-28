@@ -48,7 +48,6 @@ SELECT
     b.booking_status
 FROM CUSTOMER c
 JOIN BOOKING b ON c.customer_id = b.customer_id
-JOIN PAYMENT p ON b.payment_id = p.payment_id
 JOIN (
     SELECT 
         EXTRACT(MONTH FROM booking_date) AS bmonth,
@@ -231,7 +230,7 @@ JOIN BOOKING b ON bt.booking_id = b.booking_id
 GROUP BY a.category, EXTRACT(YEAR FROM b.booking_date), EXTRACT(QUARTER FROM b.booking_date)
 ORDER BY year, quarter, total_revenue DESC;
 
--- Query 8: Customers who reviewed an attraction they also booked
+-- Query 8: Customers who reviewed an attraction they booked
 SELECT 
     c.first_name || ' ' || c.last_name AS customer_name,
     c.email,

@@ -43,10 +43,9 @@ ORDER BY t.valid_date;
 -- Index 3: booking(booking_status) — avoids full scan on DELETE/UPDATE by status
 EXPLAIN ANALYZE
 SELECT b.booking_id, c.first_name || ' ' || c.last_name AS customer_name,
-    c.email, b.booking_date, b.booking_status, b.total_price, p.amount AS payment_amount
+    c.email, b.booking_date, b.booking_status, b.total_price
 FROM BOOKING b
 JOIN CUSTOMER c ON b.customer_id = c.customer_id
-JOIN PAYMENT p ON b.payment_id = p.payment_id
 WHERE b.booking_status = 'CANCELLED'
 ORDER BY b.booking_date DESC;
 
@@ -54,9 +53,8 @@ CREATE INDEX idx_booking_status ON BOOKING(booking_status);
 
 EXPLAIN ANALYZE
 SELECT b.booking_id, c.first_name || ' ' || c.last_name AS customer_name,
-    c.email, b.booking_date, b.booking_status, b.total_price, p.amount AS payment_amount
+    c.email, b.booking_date, b.booking_status, b.total_price
 FROM BOOKING b
 JOIN CUSTOMER c ON b.customer_id = c.customer_id
-JOIN PAYMENT p ON b.payment_id = p.payment_id
 WHERE b.booking_status = 'CANCELLED'
 ORDER BY b.booking_date DESC;
