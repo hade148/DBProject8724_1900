@@ -288,10 +288,8 @@ SELECT
     b.total_price,
     ROUND(ma.avg_monthly_price::numeric, 2)   AS month_avg,
     b.booking_status,
-    p.amount                                  AS payment_amount
 FROM CUSTOMER c
 JOIN BOOKING b ON c.customer_id = b.customer_id
-JOIN PAYMENT p ON b.payment_id  = p.payment_id
 JOIN (
     SELECT
         EXTRACT(MONTH FROM booking_date) AS bmonth,
@@ -326,10 +324,8 @@ SELECT
        AND EXTRACT(YEAR  FROM b3.booking_date) = EXTRACT(YEAR  FROM b.booking_date)
     )                                         AS month_avg,
     b.booking_status,
-    p.amount                                  AS payment_amount
 FROM CUSTOMER c
 JOIN BOOKING b ON c.customer_id = b.customer_id
-JOIN PAYMENT p ON b.payment_id  = p.payment_id
 WHERE b.total_price > (
     SELECT AVG(b2.total_price)
     FROM BOOKING b2
@@ -889,7 +885,7 @@ A booking date records *when* the booking was made. It cannot logically be a fut
 ```sql
 ALTER TABLE BOOKING
 ADD CONSTRAINT chk_booking_date_not_future
-CHECK (booking_date <= CURRENT_DATE);
+CHECK (booking_date >= CURRENT_DATE);
 ```
 <img width="1450" height="586" alt="צילום מסך 2026-04-19 233857" src="https://github.com/user-attachments/assets/aa8f45ea-27b7-4401-901a-e35ed6b4ce4b" />  
 
@@ -901,7 +897,7 @@ VALUES (99999, 99999, 50.00);
 
 -- Attempt to insert a booking dated in the future
 INSERT INTO BOOKING (booking_id, customer_id, booking_date, booking_status, total_price, payment_id)
-VALUES (99999, 1, '2030-01-01', 'CONFIRMED', 50.00, 99999);
+VALUES (99999, 1, '2020-01-01', 'CONFIRMED', 50.00, 99999);
 ```
 <img width="1270" height="532" alt="צילום מסך 2026-04-19 233922" src="https://github.com/user-attachments/assets/fc7768cb-2334-4485-86da-4a8bfa923990" />
 
@@ -1148,10 +1144,8 @@ SELECT
     b.booking_date,
     b.booking_status,
     b.total_price,
-    p.amount AS payment_amount
 FROM BOOKING b
 JOIN CUSTOMER c ON b.customer_id = c.customer_id
-JOIN PAYMENT  p ON b.payment_id  = p.payment_id
 WHERE b.booking_status = 'CANCELLED'
 ORDER BY b.booking_date DESC;
 ```
