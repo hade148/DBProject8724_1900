@@ -31,8 +31,7 @@ CREATE TABLE TICKET
   ticket_type VARCHAR(20) NOT NULL,
   available_quantity INT CHECK (available_quantity >= 0),
   PRIMARY KEY (ticket_id),
-  FOREIGN KEY (attraction_id) REFERENCES ATTRACTION(attraction_id),
-  UNIQUE (attraction_id)
+  FOREIGN KEY (attraction_id) REFERENCES ATTRACTION(attraction_id)
 );
 
 CREATE TABLE PAYMENT
@@ -54,9 +53,8 @@ CREATE TABLE BOOKING
   payment_id INT NOT NULL,
   PRIMARY KEY (booking_id),
   FOREIGN KEY (customer_id) REFERENCES CUSTOMER(customer_id),
-  FOREIGN KEY (payment_id) REFERENCES PAYMENT(payment_id),
-  UNIQUE (customer_id)
-);
+  FOREIGN KEY (payment_id) REFERENCES PAYMENT(payment_id)
+  );
 
 CREATE TABLE REVIEW
 (
@@ -68,9 +66,7 @@ CREATE TABLE REVIEW
   review_date DATE NOT NULL,
   PRIMARY KEY (review_id),
   FOREIGN KEY (customer_id) REFERENCES CUSTOMER(customer_id),
-  FOREIGN KEY (attraction_id) REFERENCES ATTRACTION(attraction_id),
-  UNIQUE (customer_id),
-  UNIQUE (attraction_id)
+  FOREIGN KEY (attraction_id) REFERENCES ATTRACTION(attraction_id)
 );
 
 CREATE TABLE BOOKINGTICKET
