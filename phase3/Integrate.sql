@@ -13,16 +13,16 @@
 -- STEP 0 – Context (already executed before this script)
 -- After restoring our backup we renamed the clashing tables:
 --
---   ALTER TABLE customer    RENAME TO customer1;
---   ALTER TABLE attraction  RENAME TO attraction1;
---   ALTER TABLE review      RENAME TO review1;
---   ALTER TABLE ticket      RENAME TO ticket1;
---
---   ALTER TABLE customer1   RENAME CONSTRAINT customer_pkey    TO customer1_pkey;
---   ALTER TABLE attraction1 RENAME CONSTRAINT attraction_pkey  TO attraction1_pkey;
---   ALTER TABLE review1     RENAME CONSTRAINT review_pkey      TO review1_pkey;
---   ALTER TABLE ticket1     RENAME CONSTRAINT ticket1_pkey     TO ticket1_pkey;
---
+  ALTER TABLE customer    RENAME TO customer1;
+  ALTER TABLE attraction  RENAME TO attraction1;
+  ALTER TABLE review      RENAME TO review1;
+  ALTER TABLE ticket      RENAME TO ticket1;
+
+  ALTER TABLE customer1   RENAME CONSTRAINT customer_pkey    TO customer1_pkey;
+  ALTER TABLE attraction1 RENAME CONSTRAINT attraction_pkey  TO attraction1_pkey;
+  ALTER TABLE review1     RENAME CONSTRAINT review_pkey      TO review1_pkey;
+  ALTER TABLE ticket1     RENAME CONSTRAINT ticket1_pkey     TO ticket1_pkey;
+
 -- Then we restored the second team's backup (their tables
 -- loaded as: CUSTOMER, ATTRACTION, TICKET, REVIEW,
 --            REVIEWREACTION, REVIEWREPORT).
@@ -50,8 +50,19 @@ ALTER TABLE review1
 
 -- ============================================================
 -- STEP 2 – Import THEIR data into OUR (renamed) tables
--- IDs are shifted by +1000 to avoid collision with ours (1-N).
+-- IDs are shifted DYNAMICALLY: offset = MAX(existing_id) so
+-- that new rows always start right after the last existing ID.
+-- The offsets are stored in a temp table BEFORE any inserts,
+-- so they stay consistent across all statements.
 -- ============================================================
+
+-- ── 2-prep. Snapshot the current MAX IDs into a temp table ───
+CREATE TEMP TABLE _offsets AS
+SELECT
+    (SELECT COALESCE(MAX(customer_id),   0) FROM customer1)   AS cust,
+    (SELECT COALESCE(MAX(attraction_id), 0) FROM attraction1) AS attr,
+    (SELECT COALESCE(MAX(ticket_id),     0) FROM ticket1)     AS tick,
+    (SELECT COALESCE(MAX(review_id),     0) FROM review1)     AS rev;
 
 -- ── 2a. CUSTOMER ─────────────────────────────────────────────
 -- Their columns: customer_id, full_name, email, phone, register_date
@@ -60,7 +71,7 @@ INSERT INTO customer1
     (customer_id, first_name, last_name, email, phone,
      password, country, register_date)
 SELECT
-    c.customer_id + 1000                               AS customer_id,
+    c.customer_id + (SELECT cust FROM _offsets)        AS customer_id,
     SPLIT_PART(c.full_name::TEXT, ' ', 1)              AS first_name,
     NULLIF(SPLIT_PART(c.full_name::TEXT, ' ', 2), '')  AS last_name,
     c.email::TEXT                                      AS email,
@@ -69,7 +80,8 @@ SELECT
     'Unknown'                                          AS country,
     c.register_date::DATE                              AS register_date
 FROM CUSTOMER c
-WHERE (c.customer_id + 1000) NOT IN (SELECT customer_id FROM customer1);
+WHERE (c.customer_id + (SELECT cust FROM _offsets))
+      NOT IN (SELECT customer_id FROM customer1);
 
 -- ── 2b. ATTRACTION ───────────────────────────────────────────
 -- Their columns: attraction_id, attraction_name, city, category, description
@@ -79,15 +91,16 @@ INSERT INTO attraction1
     (attraction_id, name, location, description,
      opening_hours, category, price)
 SELECT
-    a.attraction_id + 1000   AS attraction_id,
-    a.attraction_name::TEXT  AS name,
-    a.city::TEXT             AS location,
-    a.description::TEXT      AS description,
-    '09:00:00'               AS opening_hours,
-    a.category::TEXT         AS category,
-    0                        AS price
+    a.attraction_id + (SELECT attr FROM _offsets)  AS attraction_id,
+    a.attraction_name::TEXT                        AS name,
+    a.city::TEXT                                   AS location,
+    a.description::TEXT                            AS description,
+    '09:00:00'                                     AS opening_hours,
+    a.category::TEXT                               AS category,
+    0                                              AS price
 FROM ATTRACTION a
-WHERE (a.attraction_id + 1000) NOT IN (SELECT attraction_id FROM attraction1);
+WHERE (a.attraction_id + (SELECT attr FROM _offsets))
+      NOT IN (SELECT attraction_id FROM attraction1);
 
 -- ── 2c. TICKET ───────────────────────────────────────────────
 -- Their columns: ticket_id, purchase_date, visit_date, price,
@@ -99,14 +112,15 @@ INSERT INTO ticket1
     (ticket_id, attraction_id, price, valid_date,
      ticket_type, available_quantity)
 SELECT
-    t.ticket_id     + 1000    AS ticket_id,
-    t.attraction_id + 1000    AS attraction_id,
-    t.price::FLOAT            AS price,
-    t.visit_date::DATE        AS valid_date,
-    'REGULAR'                 AS ticket_type,
-    NULL                      AS available_quantity
+    t.ticket_id     + (SELECT tick FROM _offsets)  AS ticket_id,
+    t.attraction_id + (SELECT attr FROM _offsets)  AS attraction_id,
+    t.price::FLOAT                                 AS price,
+    t.visit_date::DATE                             AS valid_date,
+    'REGULAR'                                      AS ticket_type,
+    NULL                                           AS available_quantity
 FROM TICKET t
-WHERE (t.ticket_id + 1000) NOT IN (SELECT ticket_id FROM ticket1);
+WHERE (t.ticket_id + (SELECT tick FROM _offsets))
+      NOT IN (SELECT ticket_id FROM ticket1);
 
 -- ── 2d. REVIEW ───────────────────────────────────────────────
 -- Their columns: review_id, ticket_id, rating, title, content,
@@ -118,19 +132,20 @@ INSERT INTO review1
     (review_id, customer_id, attraction_id, rating, comment,
      review_date, title, is_deleted, deleted_date)
 SELECT
-    r.review_id     + 1000                         AS review_id,
-    t.customer_id   + 1000                         AS customer_id,
-    t.attraction_id + 1000                         AS attraction_id,
-    r.rating::FLOAT                                AS rating,
+    r.review_id     + (SELECT rev  FROM _offsets)          AS review_id,
+    t.customer_id   + (SELECT cust FROM _offsets)          AS customer_id,
+    t.attraction_id + (SELECT attr FROM _offsets)          AS attraction_id,
+    r.rating::FLOAT                                        AS rating,
     COALESCE(r.content::TEXT, r.title::TEXT,
-             'imported review')                    AS comment,
-    r.review_date::DATE                            AS review_date,
-    r.title::TEXT                                  AS title,
-    COALESCE(r.is_deleted::BOOLEAN, FALSE)         AS is_deleted,
-    r.deleted_date::DATE                           AS deleted_date
+             'imported review')                            AS comment,
+    r.review_date::DATE                                    AS review_date,
+    r.title::TEXT                                          AS title,
+    COALESCE(r.is_deleted::BOOLEAN, FALSE)                 AS is_deleted,
+    r.deleted_date::DATE                                   AS deleted_date
 FROM REVIEW r
 JOIN TICKET t ON r.ticket_id = t.ticket_id
-WHERE (r.review_id + 1000) NOT IN (SELECT review_id FROM review1);
+WHERE (r.review_id + (SELECT rev FROM _offsets))
+      NOT IN (SELECT review_id FROM review1);
 
 -- ── 2e. REVIEWREACTION – re-point FKs to our merged tables ──
 -- Shift IDs so they reference the shifted customer/review rows.
@@ -139,8 +154,8 @@ ALTER TABLE REVIEWREACTION
     DROP CONSTRAINT IF EXISTS reviewreaction_customer_id_fkey;
 
 UPDATE REVIEWREACTION
-SET review_id   = review_id   + 1000,
-    customer_id = customer_id + 1000;
+SET review_id   = review_id   + (SELECT rev  FROM _offsets),
+    customer_id = customer_id + (SELECT cust FROM _offsets);
 
 ALTER TABLE REVIEWREACTION
     ADD CONSTRAINT reviewreaction_review_id_fkey
@@ -154,14 +169,17 @@ ALTER TABLE REVIEWREPORT
     DROP CONSTRAINT IF EXISTS reviewreport_customer_id_fkey;
 
 UPDATE REVIEWREPORT
-SET review_id   = review_id   + 1000,
-    customer_id = customer_id + 1000;
+SET review_id   = review_id   + (SELECT rev  FROM _offsets),
+    customer_id = customer_id + (SELECT cust FROM _offsets);
 
 ALTER TABLE REVIEWREPORT
     ADD CONSTRAINT reviewreport_review_id_fkey
         FOREIGN KEY (review_id)   REFERENCES review1(review_id),
     ADD CONSTRAINT reviewreport_customer_id_fkey
         FOREIGN KEY (customer_id) REFERENCES customer1(customer_id);
+
+-- ── 2-cleanup. Drop the temp offsets table ───────────────────
+DROP TABLE IF EXISTS _offsets;
 
 -- ============================================================
 -- STEP 3 – Drop source tables from the second team's backup

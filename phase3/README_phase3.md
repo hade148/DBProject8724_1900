@@ -146,7 +146,7 @@ The final schema after integration:
 
 | Their Column | Our Column | Decision |
 |---|---|---|
-| customer_id | customer_id | Identical — their IDs shifted +1000 to avoid collision |
+| customer_id | customer_id | Identical — their IDs shifted dynamically by MAX(existing_id) to avoid collision |
 | full_name | first_name + last_name | Our split form is richer; `full_name` split on first space during import |
 | email | email | Identical |
 | phone | phone | Identical |
@@ -158,7 +158,7 @@ The final schema after integration:
 
 | Their Column | Our Column | Decision |
 |---|---|---|
-| attraction_id | attraction_id | Identical — their IDs shifted +1000 |
+| attraction_id | attraction_id | Identical — their IDs shifted dynamically by MAX(existing_id) |
 | attraction_name | name | Equivalent — kept our `name` |
 | city | location | **Equivalent — kept our `location`** (no new column added) |
 | category | category | Identical |
@@ -170,7 +170,7 @@ The final schema after integration:
 
 | Their Column | Our Column | Decision |
 |---|---|---|
-| ticket_id | ticket_id | Identical — their IDs shifted +1000 |
+| ticket_id | ticket_id | Identical — their IDs shifted dynamically by MAX(existing_id) |
 | visit_date | valid_date | **Equivalent — kept our `valid_date`** |
 | price | price | Identical |
 | purchase_date | *(missing)* | ❌ **Not adopted** — group decision |
@@ -182,7 +182,7 @@ The final schema after integration:
 
 | Their Column | Our Column | Decision |
 |---|---|---|
-| review_id | review_id | Identical — their IDs shifted +1000 |
+| review_id | review_id | Identical — their IDs shifted dynamically by MAX(existing_id) |
 | rating | rating | Identical |
 | review_date | review_date | Identical |
 | title | *(missing)* | ✅ **Added** — genuine extra metadata |
@@ -195,8 +195,8 @@ The final schema after integration:
 
 | Table | Decision |
 |---|---|
-| REVIEWREACTION | ✅ **Kept** — entirely new to our schema; IDs and FKs updated to +1000 |
-| REVIEWREPORT | ✅ **Kept** — entirely new to our schema; IDs and FKs updated to +1000 |
+| REVIEWREACTION | ✅ **Kept** — entirely new to our schema; IDs and FKs updated dynamically |
+| REVIEWREPORT | ✅ **Kept** — entirely new to our schema; IDs and FKs updated dynamically |
 
 ---
 
@@ -238,74 +238,86 @@ No changes were made to ATTRACTION or TICKET (group decision).
 
 ### Step 2 — Data Migration
 
-All IDs from the second team are shifted by **+1000** to prevent primary-key collisions.
+All IDs from the second team are shifted **dynamically** using `MAX(existing_id)` — the offset is calculated at runtime from the last existing ID in each table. This ensures that imported rows always start right after the highest existing ID, preventing collisions regardless of data volume.
+
+Before any inserts, a temporary table snapshots the current MAX IDs. These values stay constant throughout the migration, keeping all foreign-key references consistent:
+
+```sql
+CREATE TEMP TABLE _offsets AS
+SELECT
+    (SELECT COALESCE(MAX(customer_id),   0) FROM customer1)   AS cust,
+    (SELECT COALESCE(MAX(attraction_id), 0) FROM attraction1) AS attr,
+    (SELECT COALESCE(MAX(ticket_id),     0) FROM ticket1)     AS tick,
+    (SELECT COALESCE(MAX(review_id),     0) FROM review1)     AS rev;
+```
 
 **CUSTOMER** — `full_name` is split on the first space:
 ```sql
 INSERT INTO customer1 (customer_id, first_name, last_name, email, phone, password, country, register_date)
 SELECT
-    c.customer_id + 1000,
+    c.customer_id + (SELECT cust FROM _offsets),
     SPLIT_PART(c.full_name::TEXT, ' ', 1),
     NULLIF(SPLIT_PART(c.full_name::TEXT, ' ', 2), ''),
     c.email::TEXT, c.phone::TEXT,
     'imported_pwd', 'Unknown',
     c.register_date::DATE
 FROM CUSTOMER c
-WHERE (c.customer_id + 1000) NOT IN (SELECT customer_id FROM customer1);
+WHERE (c.customer_id + (SELECT cust FROM _offsets)) NOT IN (SELECT customer_id FROM customer1);
 ```
 
 **ATTRACTION** — `attraction_name → name`, `city → location`:
 ```sql
 INSERT INTO attraction1 (attraction_id, name, location, description, opening_hours, category, price)
 SELECT
-    a.attraction_id + 1000, a.attraction_name::TEXT, a.city::TEXT,
+    a.attraction_id + (SELECT attr FROM _offsets), a.attraction_name::TEXT, a.city::TEXT,
     a.description::TEXT, '09:00:00', a.category::TEXT, 0
 FROM ATTRACTION a
-WHERE (a.attraction_id + 1000) NOT IN (SELECT attraction_id FROM attraction1);
+WHERE (a.attraction_id + (SELECT attr FROM _offsets)) NOT IN (SELECT attraction_id FROM attraction1);
 ```
 
 **TICKET** — `visit_date → valid_date`, extra columns ignored:
 ```sql
 INSERT INTO ticket1 (ticket_id, attraction_id, price, valid_date, ticket_type, available_quantity)
 SELECT
-    t.ticket_id + 1000, t.attraction_id + 1000,
+    t.ticket_id + (SELECT tick FROM _offsets), t.attraction_id + (SELECT attr FROM _offsets),
     t.price::FLOAT, t.visit_date::DATE, 'REGULAR', NULL
 FROM TICKET t
-WHERE (t.ticket_id + 1000) NOT IN (SELECT ticket_id FROM ticket1);
+WHERE (t.ticket_id + (SELECT tick FROM _offsets)) NOT IN (SELECT ticket_id FROM ticket1);
 ```
 
 **REVIEW** — `customer_id` and `attraction_id` resolved via the TICKET chain; `content → comment`:
 ```sql
 INSERT INTO review1 (review_id, customer_id, attraction_id, rating, comment, review_date, title, is_deleted, deleted_date)
 SELECT
-    r.review_id + 1000, t.customer_id + 1000, t.attraction_id + 1000,
+    r.review_id + (SELECT rev FROM _offsets), t.customer_id + (SELECT cust FROM _offsets), t.attraction_id + (SELECT attr FROM _offsets),
     r.rating::FLOAT,
     COALESCE(r.content::TEXT, r.title::TEXT, 'imported review'),
     r.review_date::DATE, r.title::TEXT,
     COALESCE(r.is_deleted::BOOLEAN, FALSE), r.deleted_date::DATE
 FROM REVIEW r
 JOIN TICKET t ON r.ticket_id = t.ticket_id
-WHERE (r.review_id + 1000) NOT IN (SELECT review_id FROM review1);
+WHERE (r.review_id + (SELECT rev FROM _offsets)) NOT IN (SELECT review_id FROM review1);
 ```
 
 ### Step 3 — REVIEWREACTION and REVIEWREPORT FK Update
 
 For both new tables we:
 1. Dropped their old FK constraints (pointing to the temporary source tables).
-2. Shifted their `review_id` and `customer_id` columns by +1000.
+2. Shifted their `review_id` and `customer_id` columns using the same dynamic offsets from `_offsets`.
 3. Added new FK constraints pointing to our merged `review1` and `customer1` tables.
 
 ```sql
 ALTER TABLE REVIEWREACTION DROP CONSTRAINT IF EXISTS reviewreaction_review_id_fkey,
                            DROP CONSTRAINT IF EXISTS reviewreaction_customer_id_fkey;
 
-UPDATE REVIEWREACTION SET review_id = review_id + 1000, customer_id = customer_id + 1000;
+UPDATE REVIEWREACTION SET review_id = review_id + (SELECT rev FROM _offsets),
+                          customer_id = customer_id + (SELECT cust FROM _offsets);
 
 ALTER TABLE REVIEWREACTION
     ADD CONSTRAINT reviewreaction_review_id_fkey   FOREIGN KEY (review_id)   REFERENCES review1(review_id),
     ADD CONSTRAINT reviewreaction_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES customer1(customer_id);
 ```
-*(Same pattern applied to REVIEWREPORT.)*
+*(Same pattern applied to REVIEWREPORT. The `_offsets` temp table is dropped at the end.)*
 
 ### Step 4 — Cleanup and Rename
 
