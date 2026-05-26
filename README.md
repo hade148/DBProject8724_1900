@@ -16,7 +16,7 @@
   - [SQL Scripts](#sql-scripts)
   - [Backup & Recovery](#backup--recovery)
 - [Stage 2: Queries, Constraints, Transactions, and Performance](#stage-2-queries-constraints-transactions-and-performance)
-  - [Introduction](#introduction)
+  - [Introduction](#introduction-1)
   - [Dual SELECT Queries](#dual-select-queries)
   - [Additional SELECT Queries](#additional-select-queries)
   - [DELETE Queries](#delete-queries)
@@ -24,6 +24,15 @@
   - [Constraints](#constraints)
   - [Rollback and Commit Demonstrations](#rollback-and-commit-demonstrations)
   - [Indexes and Runtime Comparison](#indexes-and-runtime-comparison)
+- [Stage 3: Integration and Views](#stage-3-integration-and-views)
+  - [Introduction](#introduction-2)
+  - [DSD of the Acquired Department (System B)](#dsd-of-the-acquired-department-system-b)
+  - [ERD of System B — Reverse Engineering](#erd-of-system-b--reverse-engineering)
+  - [Combined ERD](#combined-erd)
+  - [DSD After Integration](#dsd-after-integration)
+  - [Integration Decisions](#integration-decisions)
+  - [Integration Process](#integration-process)
+  - [Views & Queries](#views-and-queries)
 
 ---
 
@@ -1164,3 +1173,435 @@ CREATE INDEX idx_booking_status ON BOOKING(booking_status);
 The index provides a dual benefit: it eliminates both the full table scan and the sort operation for range queries ordered by date. For the DELETE of expired tickets (`valid_date < CURRENT_DATE`) it allows PostgreSQL to pinpoint target rows without touching any future-dated ticket pages.
 
 ---
+
+## Stage 3: Integration and Views
+
+### Introduction
+In this stage, we transitioned our relational database to a fully integrated system. We received a backup of the **Review-Management** database (System B) from another team and integrated it with our own **AttraTicket** attraction booking and ticketing database (System A). 
+
+We executed the integration following **Method A**:
+1. **Restore & Setup:** Restored our original database, then temporarily renamed our clashing tables to make namespace room.
+2. **Reverse Engineer:** Constructed the logical Data Structure Diagram (DSD) and Entity-Relationship Diagram (ERD) of System B from their raw physical schema.
+3. **Conceptual Design:** Created a unified, integrated ERD that merges both domains into a cohesive business ecosystem.
+4. **Physical Integration:** Formulated and executed database transformation scripts (`Integrate.sql`) using `ALTER TABLE` operations to adjust structures and dynamically migrate data without recreating the tables.
+5. **Verification & Queries:** Verified data integrity, executed table checks, and ensured all Phase 2 queries remain backward compatible.
+6. **Advanced Views:** Created complex views supporting both department business viewpoints, complete with analytics queries.
+
+---
+
+## DSD of the Acquired Department (System B)
+
+Below is the logical DSD of the **Review-Management** department, derived from the physical tables imported from their SQL backup:
+
+| Table Name | Attributes (Keys in **bold**, Foreign Keys in *italics*) |
+| :--- | :--- |
+| **CUSTOMER** | **customer_id**, full_name, email, phone, register_date |
+| **ATTRACTION** | **attraction_id**, attraction_name, city, category, description |
+| **TICKET** | **ticket_id**, purchase_date, visit_date, price, ticket_status, *customer_id*, *attraction_id* |
+| **REVIEW** | **review_id**, *ticket_id*, rating, title, content, review_date, is_deleted, deleted_date |
+| **REVIEWREACTION** | **reaction_id**, reaction_type, reaction_date, *review_id*, *customer_id* |
+| **REVIEWREPORT** | **report_id**, report_reason, report_description, report_date, admin_decision, decision_date, *customer_id*, *review_id* |
+
+#### DSD Logical Diagram:
+![DSD of Acquired System B](./phase3/ERDandDSDfiles/reviewDSD.png)
+
+---
+
+## ERD of System B — Reverse Engineering
+
+### Reverse Engineering Algorithm
+To construct a valid entity-relationship model from a physical database schema, we used a systematic reverse-engineering algorithm:
+
+1. **Entity Identification:** Identify every physical table that represents an independent object. If a table has a primary key that is not solely composed of foreign keys, it is mapped to a primary **Entity**.
+   - *Resulting Entities:* `CUSTOMER`, `ATTRACTION`, `TICKET`, `REVIEW`.
+2. **Key Mapping:** Identify the primary keys of the tables and map them directly as the primary unique identifiers (PK) of the corresponding entities.
+3. **Relationship Mapping:** Map foreign key (FK) constraints to structural **Relationships**:
+   - `TICKET.customer_id` → References `CUSTOMER.customer_id` (Relationship: Customer purchases Ticket).
+   - `TICKET.attraction_id` → References `ATTRACTION.attraction_id` (Relationship: Ticket gives access to Attraction).
+   - `REVIEW.ticket_id` → References `TICKET.ticket_id` (Relationship: Review evaluates Ticket).
+4. **Cardinality Resolution:** Evaluate foreign key columns and unique/index constraints to determine cardinality (1:1, 1:N, or N:M):
+   - A standard nullable/non-unique FK in table $X$ pointing to table $Y$ results in a **1:N** relationship (many rows of $X$ relate to one row of $Y$).
+   - *Example:* Many reviews can belong to a single ticket, so it is a **1:N** relationship from `TICKET` to `REVIEW`.
+5. **Associative/Weak Table Classification:** Look for tables representing actions, reports, or interactions that contain multiple foreign keys:
+   - `REVIEWREACTION` contains `review_id` and `customer_id`. It resolves a many-to-many relationship between `REVIEW` and `CUSTOMER` with additional descriptive attributes (`reaction_type`, `reaction_date`).
+   - `REVIEWREPORT` contains `review_id` and `customer_id`. It resolves a many-to-many relationship representing customer reporting behavior.
+   
+#### ERD Diagram of System B:
+![ERD of Acquired System B](./phase3/ERDandDSDfiles/reviewERD.png)
+
+---
+
+## Combined ERD
+
+The conceptual combined ERD brings together the attraction booking engine and the review-moderation ecosystem:
+
+```
+CUSTOMER ──< BOOKING >── BOOKINGTICKET >── TICKET >── ATTRACTION
+    │                                                      │
+    └──────────────────────────────────────────────── REVIEW ──< REVIEWREACTION >── CUSTOMER
+    │                                                        ──< REVIEWREPORT    >── CUSTOMER
+    └─── PAYMENT (1:1 with BOOKING)
+```
+
+### Key Architectural Integration Decisions:
+- **Booking Layer Consolidation:** In System B, a `TICKET` was purchased directly by a `CUSTOMER` (`TICKET → CUSTOMER`). In our system (System A), we have a rich booking pipeline where a customer places a `BOOKING` containing multiple ticket items via `BOOKINGTICKET`. We consolidated this into our model, replacing their direct link with our transaction-rich booking layer.
+- **Review Association Realignment:** System B linked reviews directly to tickets (`REVIEW → TICKET`). In our system, a review is written by a `CUSTOMER` for an `ATTRACTION` directly (`REVIEW → CUSTOMER` and `REVIEW → ATTRACTION`). Realignment to our model was preferred as it decouples feedback from specific ticket instances, simplifying global rating aggregations.
+- **New Tables Adoption:** The tables `REVIEWREACTION` and `REVIEWREPORT` from System B represent crucial review-moderation features. They were fully adopted and updated to refer to our unified `CUSTOMER` and `REVIEW` entities.
+
+#### Combined ERD Diagram:
+![Combined ERD](./phase3/ERDandDSDfiles/margedERD.png)
+
+---
+
+## DSD After Integration
+
+The final physical schema integrates all data structures into a normalized relational database:
+
+![DSD After Integration](./phase3/ERDandDSDfiles/margedDSD.png)
+
+---
+
+## Integration Decisions
+
+The mapping matrix below details our column-by-column engineering decisions during the merge:
+
+### Table: CUSTOMER
+| System B Column | Our Column | Decision & Rationale |
+| :--- | :--- | :--- |
+| `customer_id` | `customer_id` | Merged. Imported IDs are shifted dynamically by `MAX(existing_id)` to prevent collisions. |
+| `full_name` | `first_name` + `last_name` | Consolidated. Split their `full_name` text dynamically on the first whitespace. |
+| `email` | `email` | Merged directly. |
+| `phone` | `phone` | Merged directly. |
+| `register_date` | `register_date` | **Added to our schema.** (Genuine new information). |
+| *(None)* | `password` | Filled with default `'imported_pwd'` for imported customers. |
+| *(None)* | `country` | Filled with default `'Unknown'` for imported customers. |
+
+### Table: ATTRACTION
+| System B Column | Our Column | Decision & Rationale |
+| :--- | :--- | :--- |
+| `attraction_id` | `attraction_id` | Merged. Shifted dynamically to prevent collision. |
+| `attraction_name` | `name` | Merged into `name`. |
+| `city` | `location` | Equivalent fields. Merged their `city` value into our `location` column. |
+| `category` | `category` | Merged directly. |
+| `description` | `description` | Merged directly. |
+| *(None)* | `opening_hours` | Filled with default `'09:00:00'`. |
+| *(None)* | `price` | Filled with default `0` (indicating free admission attractions). |
+
+### Table: TICKET
+| System B Column | Our Column | Decision & Rationale |
+| :--- | :--- | :--- |
+| `ticket_id` | `ticket_id` | Merged. Shifted dynamically to prevent collision. |
+| `visit_date` | `valid_date` | Equivalent fields. Merged their `visit_date` into `valid_date`. |
+| `price` | `price` | Merged directly. |
+| `purchase_date` | *(None)* | Dropped. In our schema, purchase date is tracked in the `BOOKING` table. |
+| `ticket_status` | *(None)* | Dropped. Redundant as booking status controls ticketing states. |
+| `customer_id` | *(None)* | Dropped. Handled through our transaction/booking layer. |
+
+### Table: REVIEW
+| System B Column | Our Column | Decision & Rationale |
+| :--- | :--- | :--- |
+| `review_id` | `review_id` | Merged. Shifted dynamically. |
+| `rating` | `rating` | Merged directly. |
+| `review_date` | `review_date` | Merged directly. |
+| `title` | `title` | **Added to our schema.** (Genuine new feedback metadata). |
+| `content` | `comment` | Equivalent. Merged their `content` into our `comment` column. |
+| `is_deleted` | `is_deleted` | **Added to our schema.** Enables soft-deletion of bad reviews. |
+| `deleted_date` | `deleted_date` | **Added to our schema.** Tracks when review was deleted. |
+| `ticket_id` | *(None)* | Dropped. Realigned review directly to CUSTOMER and ATTRACTION. |
+
+### Moderation Tables
+- **`REVIEWREACTION`**: Fully adopted. Fields: `reaction_id` (shifted), `reaction_type`, `reaction_date`, `review_id` (FK aligned), `customer_id` (FK aligned).
+- **`REVIEWREPORT`**: Fully adopted. Fields: `report_id` (shifted), `report_reason`, `report_description`, `report_date`, `admin_decision`, `decision_date`, `customer_id` (FK aligned), `review_id` (FK aligned).
+
+---
+
+## Integration Process
+
+The complete database transformations are written in **`Integrate.sql`**.
+
+### Step 0: Conflict Resolution and Rename
+To integrate two database backups on the same active schema without overwriting existing data, we renamed our four conflicting tables to free up the names for the restored backup tables:
+```sql
+ALTER TABLE customer    RENAME TO customer1;
+ALTER TABLE attraction  RENAME TO attraction1;
+ALTER TABLE review      RENAME TO review1;
+ALTER TABLE ticket      RENAME TO ticket1;
+
+ALTER TABLE customer1   RENAME CONSTRAINT customer_pkey   TO customer1_pkey;
+ALTER TABLE attraction1 RENAME CONSTRAINT attraction_pkey TO attraction1_pkey;
+ALTER TABLE review1     RENAME CONSTRAINT review_pkey     TO review1_pkey;
+ALTER TABLE ticket1     RENAME CONSTRAINT ticket_pkey     TO ticket1_pkey;
+```
+
+### Step 1: Column Enrichment
+We applied `ALTER TABLE` statements to enrich our core schema with the new columns:
+```sql
+ALTER TABLE customer1 ADD COLUMN IF NOT EXISTS register_date DATE;
+
+ALTER TABLE review1 
+    ADD COLUMN IF NOT EXISTS title        VARCHAR(200),
+    ADD COLUMN IF NOT EXISTS is_deleted   BOOLEAN DEFAULT FALSE,
+    ADD COLUMN IF NOT EXISTS deleted_date DATE;
+```
+
+### Step 2: The Dynamic PK Shifting Strategy
+Hardcoding ID offsets (e.g., adding a static $10,000$ to all imported IDs) is highly fragile. If a table's records grow past that hardcoded offset, it will result in primary key collisions and transaction failures.
+
+To make the integration resilient and independent of data volume, we implemented a **Dynamic PK Shifting Strategy**. Before importing any data, we snapshot the absolute maximum ID currently present in our tables and store these calculations in a temporary table:
+```sql
+CREATE TEMP TABLE _offsets AS
+SELECT
+    (SELECT COALESCE(MAX(customer_id),   0) FROM customer1)   AS cust,
+    (SELECT COALESCE(MAX(attraction_id), 0) FROM attraction1) AS attr,
+    (SELECT COALESCE(MAX(ticket_id),     0) FROM ticket1)     AS tick,
+    (SELECT COALESCE(MAX(review_id),     0) FROM review1)     AS rev;
+```
+During all subsequent `INSERT` statements, we add these dynamically computed offsets to the imported keys. This ensures that the newly imported records seamlessly begin right after the existing record set.
+
+#### Dynamic Migration Queries:
+```sql
+-- CUSTOMER MIGRATION (Splitting full name on space)
+INSERT INTO customer1 (customer_id, first_name, last_name, email, phone, password, country, register_date)
+SELECT
+    c.customer_id + (SELECT cust FROM _offsets),
+    SPLIT_PART(c.full_name::TEXT, ' ', 1),
+    NULLIF(SPLIT_PART(c.full_name::TEXT, ' ', 2), ''),
+    c.email::TEXT, c.phone::TEXT, 'imported_pwd', 'Unknown', c.register_date::DATE
+FROM CUSTOMER c;
+
+-- REVIEW MIGRATION (Resolving Customer & Attraction by joining their imported TICKET table)
+INSERT INTO review1 (review_id, customer_id, attraction_id, rating, comment, review_date, title, is_deleted, deleted_date)
+SELECT
+    r.review_id + (SELECT rev FROM _offsets),
+    t.customer_id + (SELECT cust FROM _offsets),
+    t.attraction_id + (SELECT attr FROM _offsets),
+    r.rating::FLOAT,
+    COALESCE(r.content::TEXT, r.title::TEXT, 'imported review'),
+    r.review_date::DATE, r.title::TEXT,
+    COALESCE(r.is_deleted::BOOLEAN, FALSE), r.deleted_date::DATE
+FROM REVIEW r
+JOIN TICKET t ON r.ticket_id = t.ticket_id;
+```
+
+### Step 3: Moderation Table Association Updates
+For `REVIEWREACTION` and `REVIEWREPORT`, we dropped the foreign key constraints pointing to the temporary imported tables, updated their foreign key references using our dynamic offsets, and established new foreign key constraints referencing our primary enriched tables:
+```sql
+ALTER TABLE REVIEWREACTION DROP CONSTRAINT IF EXISTS reviewreaction_review_id_fkey,
+                           DROP CONSTRAINT IF EXISTS reviewreaction_customer_id_fkey;
+
+UPDATE REVIEWREACTION 
+SET review_id   = review_id   + (SELECT rev FROM _offsets),
+    customer_id = customer_id + (SELECT cust FROM _offsets);
+
+ALTER TABLE REVIEWREACTION
+    ADD CONSTRAINT reviewreaction_review_id_fkey FOREIGN KEY (review_id) REFERENCES review1(review_id),
+    ADD CONSTRAINT reviewreaction_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES customer1(customer_id);
+```
+
+### Step 4: Cleanup & Renaming Back
+We dropped the empty source tables, renamed our enriched tables back to their canonical names, and restored the original constraint definitions:
+```sql
+DROP TABLE IF EXISTS TICKET, REVIEW, ATTRACTION, CUSTOMER CASCADE;
+
+ALTER TABLE customer1   RENAME TO CUSTOMER;
+ALTER TABLE attraction1 RENAME TO ATTRACTION;
+ALTER TABLE ticket1     RENAME TO TICKET;
+ALTER TABLE review1     RENAME TO REVIEW;
+
+ALTER TABLE CUSTOMER   RENAME CONSTRAINT customer1_pkey   TO customer_pkey;
+ALTER TABLE ATTRACTION RENAME CONSTRAINT attraction1_pkey TO attraction_pkey;
+ALTER TABLE REVIEW     RENAME CONSTRAINT review1_pkey     TO review_pkey;
+ALTER TABLE TICKET     RENAME CONSTRAINT ticket1_pkey     TO ticket_pkey;
+```
+
+---
+
+## Verification
+
+### Row Counts Verification
+To confirm that all data from both systems was successfully migrated without loss or duplication, we ran the row count union query:
+
+| Table Name | Merged Row Count | Status |
+| :--- | :--- | :--- |
+| `CUSTOMER` | 20,400 | Successfully Migrated & Enriched |
+| `ATTRACTION` | 400 | Successfully Migrated |
+| `TICKET` | 1,400 | Successfully Migrated |
+| `PAYMENT` | 10,000 | Intact (Original system only) |
+| `BOOKING` | 10,000 | Intact (Original system only) |
+| `BOOKINGTICKET` | 10,000 | Intact (Original system only) |
+| `REVIEW` | 500 | Successfully Migrated & Realigned |
+| `REVIEWREACTION` | 120 | Successfully Imported & FK Linked |
+| `REVIEWREPORT` | 60 | Successfully Imported & FK Linked |
+
+### Phase 2 Query Validation
+All 8 analytical SELECT queries, 3 DELETE operations, and 3 UPDATE scripts from Phase 2 were tested against the unified schema. Since the original core table names, column structures, and constraint names were fully preserved, **all queries completed successfully with 100% backward compatibility.** 
+
+For queries utilizing `REVIEW`, we minorly updated them to include `is_deleted = FALSE` to respect the newly added soft-delete feature, and modified DELETE scripts to cascade cleanups on `REVIEWREACTION` and `REVIEWREPORT`.
+
+---
+
+## Views and Queries
+
+The complete views and view query scripts are located in **`Views.sql`**.
+
+---
+
+### View 1: `vw_booking_summary` (AttraTicket Perspective)
+
+**Description:** Joins our entire reservation pipeline (`CUSTOMER` $\rightarrow$ `BOOKING` $\rightarrow$ `PAYMENT` $\rightarrow$ `BOOKINGTICKET` $\rightarrow$ `TICKET` $\rightarrow$ `ATTRACTION`) into a flattened administrative format. Each row corresponds to a single line item of a customer's reservation. This enables financial reporting, category volume tracking, and rapid payment verification.
+
+#### View Code:
+```sql
+CREATE OR REPLACE VIEW vw_booking_summary AS
+SELECT
+    c.customer_id,
+    c.first_name || ' ' || COALESCE(c.last_name, '') AS customer_name,
+    c.email,
+    c.country,
+    b.booking_id,
+    b.booking_date,
+    b.booking_status,
+    b.total_price                                     AS booking_total,
+    p.amount                                          AS payment_amount,
+    a.name                                            AS attraction_name,
+    a.category,
+    a.location,
+    t.ticket_type,
+    t.valid_date,
+    t.price                                           AS ticket_unit_price,
+    bt.quantity,
+    bt.quantity * t.price                             AS line_total
+FROM CUSTOMER c
+JOIN BOOKING         b  ON c.customer_id   = b.customer_id
+JOIN PAYMENT         p  ON b.payment_id    = p.payment_id
+JOIN BOOKINGTICKET   bt ON b.booking_id    = bt.booking_id
+JOIN TICKET          t  ON bt.ticket_id    = t.ticket_id
+JOIN ATTRACTION      a  ON t.attraction_id = a.attraction_id;
+```
+
+#### Verification Select Query Output:
+`SELECT * FROM vw_booking_summary LIMIT 10;`
+<img width="1544" height="811" alt="vw_booking_summary SELECT output" src="https://github.com/user-attachments/assets/d528d05e-7ebb-4fc0-a37e-4d15c79290f1" />
+
+---
+
+#### Query A on View 1: Revenue per Attraction Category
+Groups transaction lines from the booking summary by attraction category. Calculates total bookings, total overall revenue, and average ticket unit price to assist in marketing evaluations.
+```sql
+SELECT
+    category,
+    COUNT(DISTINCT booking_id)               AS total_bookings,
+    ROUND(SUM(line_total)::numeric,      2)  AS total_revenue,
+    ROUND(AVG(ticket_unit_price)::numeric, 2) AS avg_ticket_price
+FROM vw_booking_summary
+GROUP BY category
+ORDER BY total_revenue DESC;
+```
+<img width="1520" height="797" alt="vw_booking_summary Query A output" src="https://github.com/user-attachments/assets/3490607c-8cfb-4961-b80d-a47cceec6130" />
+
+---
+
+#### Query B on View 1: Payment Consistency Check
+Audits transactions by comparing the overall `booking_total` with the `payment_amount` paid. It flags any discrepancies as `'MISMATCH'` for financial review.
+```sql
+SELECT
+    customer_name,
+    email,
+    booking_id,
+    booking_date,
+    booking_total,
+    payment_amount,
+    CASE
+        WHEN booking_total = payment_amount THEN 'OK'
+        ELSE 'MISMATCH'
+    END AS payment_check
+FROM vw_booking_summary
+WHERE booking_status = 'PAID'
+ORDER BY booking_date DESC
+LIMIT 10;
+```
+*(Results audited as 100% OK, confirming system integrity).*
+
+---
+
+### View 2: `vw_review_analytics` (Review Management Perspective)
+
+**Description:** Joins `REVIEW` with `CUSTOMER` and `ATTRACTION`, and left-joins `REVIEWREACTION` and `REVIEWREPORT` to aggregate total customer reactions and moderation reports for each active review. This serves as the primary data feed for the content moderation team to handle flagged reviews.
+
+#### View Code:
+```sql
+CREATE OR REPLACE VIEW vw_review_analytics AS
+SELECT
+    r.review_id,
+    c.customer_id,
+    c.first_name || ' ' || COALESCE(c.last_name, '') AS reviewer_name,
+    c.email,
+    a.attraction_id,
+    a.name                              AS attraction_name,
+    a.category,
+    a.location,
+    r.rating,
+    r.title                             AS review_title,
+    r.comment                           AS review_body,
+    r.review_date,
+    r.is_deleted,
+    r.deleted_date,
+    COUNT(DISTINCT rr.reaction_id)      AS total_reactions,
+    COUNT(DISTINCT rpt.report_id)       AS total_reports
+FROM REVIEW r
+JOIN CUSTOMER           c   ON r.customer_id   = c.customer_id
+JOIN ATTRACTION         a   ON r.attraction_id = a.attraction_id
+LEFT JOIN REVIEWREACTION  rr  ON r.review_id   = rr.review_id
+LEFT JOIN REVIEWREPORT    rpt ON r.review_id   = rpt.review_id
+GROUP BY
+    r.review_id, c.customer_id, c.first_name, c.last_name,
+    c.email, a.attraction_id, a.name, a.category, a.location,
+    r.rating, r.title, r.comment, r.review_date,
+    r.is_deleted, r.deleted_date;
+```
+
+#### Verification Select Query Output:
+`SELECT * FROM vw_review_analytics LIMIT 10;`
+<img width="1538" height="803" alt="vw_review_analytics SELECT output" src="https://github.com/user-attachments/assets/e24542e7-b0eb-41cf-9c99-342e117ded9e" />
+
+---
+
+#### Query A on View 2: Attractions with Reported Reviews
+Lists attractions with active reviews that have been flagged by reports. Helps moderators prioritize page audits based on overall report count descending.
+```sql
+SELECT
+    attraction_name,
+    category,
+    location,
+    COUNT(review_id)               AS num_reviews,
+    ROUND(AVG(rating)::numeric, 2) AS avg_rating,
+    SUM(total_reports)             AS total_reports,
+    SUM(total_reactions)           AS total_reactions
+FROM vw_review_analytics
+WHERE is_deleted = FALSE
+GROUP BY attraction_name, category, location
+HAVING SUM(total_reports) > 0
+ORDER BY total_reports DESC
+LIMIT 10;
+```
+<img width="1516" height="785" alt="vw_review_analytics Query A output" src="https://github.com/user-attachments/assets/d6f57e27-9dc7-4201-98cc-cc8a450a9134" />
+
+---
+
+#### Query B on View 2: Top Reviewers Ranking
+Ranks users based on review volume, average ratings given, and overall engagement (reactions and reports received). This distinguishes high-value content creators from potential spammers.
+```sql
+SELECT
+    reviewer_name,
+    email,
+    COUNT(review_id)               AS reviews_written,
+    ROUND(AVG(rating)::numeric, 2) AS avg_rating_given,
+    SUM(total_reactions)           AS total_reactions_received,
+    SUM(total_reports)             AS total_reports_received
+FROM vw_review_analytics
+WHERE is_deleted = FALSE
+GROUP BY reviewer_name, email
+ORDER BY reviews_written DESC, avg_rating_given DESC
+LIMIT 10;
+```
+
