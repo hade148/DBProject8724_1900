@@ -593,3 +593,8 @@ LIMIT 10;
 > 📌 **Note:** Screenshot of query output to be added here.
 
 ---
+<img width="1520" height="797" alt="צילום מסך 2026-05-26 150055" src="https://github.com/user-attachments/assets/3490607c-8cfb-4961-b80d-a47cceec6130" />
+<img width="1544" height="811" alt="צילום מסך 2026-05-26 150026" src="https://github.com/user-attachments/assets/d528d05e-7ebb-4fc0-a37e-4d15c79290f1" />
+<img width="1516" height="785" alt="צילום מסך 2026-05-26 150200" src="https://github.com/user-attachments/assets/d6f57e27-9dc7-4201-98cc-cc8a450a9134" />
+<img width="1538" height="803" alt="צילום מסך 2026-05-26 150132" src="https://github.com/user-attachments/assets/e24542e7-b0eb-41cf-9c99-342e117ded9e" />
+
