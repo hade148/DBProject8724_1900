@@ -165,7 +165,7 @@ The final schema after integration:
 
 | Their Column | Our Column | Decision |
 |---|---|---|
-| customer_id | customer_id | Identical — their IDs shifted dynamically by MAX(existing_id) to avoid collision |
+| customer_id | customer_id | Identical — imported as `new_id = source_id + offset`, where `offset = MAX(customer_id)` snapshot before inserts |
 | full_name | first_name + last_name | Our split form is richer; `full_name` split on first space during import |
 | email | email | Identical |
 | phone | phone | Identical |
@@ -177,7 +177,7 @@ The final schema after integration:
 
 | Their Column | Our Column | Decision |
 |---|---|---|
-| attraction_id | attraction_id | Identical — their IDs shifted dynamically by MAX(existing_id) |
+| attraction_id | attraction_id | Identical — imported as `new_id = source_id + offset`, where `offset = MAX(attraction_id)` snapshot before inserts |
 | attraction_name | name | Equivalent — kept our `name` |
 | city | location | **Equivalent — kept our `location`** (no new column added) |
 | category | category | Identical |
@@ -189,19 +189,19 @@ The final schema after integration:
 
 | Their Column | Our Column | Decision |
 |---|---|---|
-| ticket_id | ticket_id | Identical — their IDs shifted dynamically by MAX(existing_id) |
+| ticket_id | ticket_id | Identical — imported as `new_id = source_id + offset`, where `offset = MAX(ticket_id)` snapshot before inserts |
 | visit_date | valid_date | **Equivalent — kept our `valid_date`** |
 | price | price | Identical |
 | purchase_date | *(missing)* | ❌ **Not adopted** — group decision |
 | ticket_status | *(missing)* | ❌ **Not adopted** — group decision |
 | customer_id | *(missing)* | ❌ **Not adopted** — link handled via BOOKING layer |
-| attraction_id | attraction_id | Identical — shifted dynamically by MAX(existing_id) |
+| attraction_id | attraction_id | Identical — imported as `new_id = source_id + offset`, where `offset = MAX(attraction_id)` snapshot before inserts |
 
 ### REVIEW
 
 | Their Column | Our Column | Decision |
 |---|---|---|
-| review_id | review_id | Identical — their IDs shifted dynamically by MAX(existing_id) |
+| review_id | review_id | Identical — imported as `new_id = source_id + offset`, where `offset = MAX(review_id)` snapshot before inserts |
 | rating | rating | Identical |
 | review_date | review_date | Identical |
 | title | *(missing)* | ✅ **Added** — genuine extra metadata |
