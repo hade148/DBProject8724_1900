@@ -21,7 +21,7 @@
   ALTER TABLE customer1   RENAME CONSTRAINT customer_pkey    TO customer1_pkey;
   ALTER TABLE attraction1 RENAME CONSTRAINT attraction_pkey  TO attraction1_pkey;
   ALTER TABLE review1     RENAME CONSTRAINT review_pkey      TO review1_pkey;
-  ALTER TABLE ticket1     RENAME CONSTRAINT ticket1_pkey     TO ticket1_pkey;
+  ALTER TABLE ticket1     RENAME CONSTRAINT ticket_pkey      TO ticket1_pkey;
 
 -- Then we restored the second team's backup (their tables
 -- loaded as: CUSTOMER, ATTRACTION, TICKET, REVIEW,

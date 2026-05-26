@@ -24,6 +24,18 @@
   - [Constraints](#constraints)
   - [Rollback and Commit Demonstrations](#rollback-and-commit-demonstrations)
   - [Indexes and Runtime Comparison](#indexes-and-runtime-comparison)
+- [Stage 3: Integration and Views](#stage-3-integration-and-views)
+
+---
+
+## Stage 3: Integration and Views
+
+The full Stage 3 report and deliverables are maintained in:
+
+- **[phase3/README_phase3.md](./phase3/README_phase3.md)**
+- **[phase3/Integrate.sql](./phase3/Integrate.sql)**
+- **[phase3/Views.sql](./phase3/Views.sql)**
+- **[phase3/Queries.sql](./phase3/Queries.sql)**
 
 ---
 

@@ -42,6 +42,25 @@ The integration follows **Method A**:
 
 ---
 
+## Submission Compliance (Method A)
+
+The table below maps the official Stage C submission requirements to repository files:
+
+| # | Required Submission Item | Repository Path / Status |
+|---|---|---|
+| 1 | DSD of acquired department | Documented in this report section; diagram screenshot should be attached in submission package |
+| 2 | ERD of acquired department | Documented in this report section + reverse-engineering algorithm; diagram screenshot should be attached in submission package |
+| 3 | Combined ERD | Documented in this report section; diagram screenshot should be attached in submission package |
+| 4 | DSD after integration | Documented in this report section; diagram screenshot should be attached in submission package |
+| 5 | Table change / integration SQL (`Integrate.sql`) | [`phase3/Integrate.sql`](./Integrate.sql) |
+| 6 | Views + view queries (`Views.sql`) | [`phase3/Views.sql`](./Views.sql) |
+| 7 | Updated backup (`backup3`) | To be attached in final submission package |
+| 8 | Stage C project report | [`phase3/README_phase3.md`](./README_phase3.md) |
+
+> ✅ This README is the structured Stage C report; SQL deliverables are versioned under `phase3/`.
+
+---
+
 ## DSD of the Acquired Department (System B)
 
 The tables loaded from the second team's backup:
@@ -55,7 +74,7 @@ The tables loaded from the second team's backup:
 | REVIEWREACTION | reaction_id (PK), reaction_type, reaction_date, review_id (FK→REVIEW), customer_id (FK→CUSTOMER) |
 | REVIEWREPORT | report_id (PK), report_reason, report_description, report_date, admin_decision, decision_date, customer_id (FK→CUSTOMER), review_id (FK→REVIEW) |
 
->  **Note:** Screenshot of DSD to be added here after generating in ERDPlus.
+> 📌 **Submission note:** Attach the ERDPlus DSD screenshot in the final submission package.
 
 ---
 
@@ -95,7 +114,7 @@ CUSTOMER ──< TICKET >── ATTRACTION
                    ──< REVIEWREPORT    >── CUSTOMER
 ```
 
-> 📌 **Note:** Full ERD diagram (ERDPlus screenshot) to be added here.
+> 📌 **Submission note:** Attach the ERDPlus ERD screenshot in the final submission package.
 
 ---
 
@@ -116,7 +135,7 @@ Key design decisions:
 - **REVIEW** now connects to CUSTOMER and ATTRACTION directly (our model), making the `ticket_id` FK in their schema redundant in the merged design.
 - **REVIEWREACTION** and **REVIEWREPORT** are added as new tables with FK references updated to our unified REVIEW and CUSTOMER.
 
-> 📌 **Note:** Combined ERD diagram (ERDPlus screenshot) to be added here.
+> 📌 **Submission note:** Attach the merged ERDPlus ERD screenshot in the final submission package.
 
 ---
 
@@ -136,7 +155,7 @@ The final schema after integration:
 | REVIEWREACTION | **New** | Imported from their system, FKs updated |
 | REVIEWREPORT | **New** | Imported from their system, FKs updated |
 
-> 📌 **Note:** DSD after integration (ERDPlus screenshot) to be added here.
+> 📌 **Submission note:** Attach the post-integration DSD screenshot in the final submission package.
 
 ---
 
@@ -176,7 +195,7 @@ The final schema after integration:
 | purchase_date | *(missing)* | ❌ **Not adopted** — group decision |
 | ticket_status | *(missing)* | ❌ **Not adopted** — group decision |
 | customer_id | *(missing)* | ❌ **Not adopted** — link handled via BOOKING layer |
-| attraction_id | attraction_id | Identical — shifted +1000 |
+| attraction_id | attraction_id | Identical — shifted dynamically by MAX(existing_id) |
 
 ### REVIEW
 
@@ -216,7 +235,7 @@ ALTER TABLE ticket      RENAME TO ticket1;
 ALTER TABLE customer1   RENAME CONSTRAINT customer_pkey    TO customer1_pkey;
 ALTER TABLE attraction1 RENAME CONSTRAINT attraction_pkey  TO attraction1_pkey;
 ALTER TABLE review1     RENAME CONSTRAINT review_pkey      TO review1_pkey;
-ALTER TABLE ticket1     RENAME CONSTRAINT ticket1_pkey     TO ticket1_pkey;
+ALTER TABLE ticket1     RENAME CONSTRAINT ticket_pkey      TO ticket1_pkey;
 ```
 
 ### Step 1 — Column Enrichment
@@ -352,13 +371,13 @@ SELECT 'REVIEWREACTION',      COUNT(*)          FROM REVIEWREACTION UNION ALL
 SELECT 'REVIEWREPORT',        COUNT(*)          FROM REVIEWREPORT;
 ```
 
-> 📌 **Note:** Screenshot of verification output to be added here.
+> 📌 **Submission note:** Attach screenshot of this verification query output.
 
 ### Step 6 — Phase-2 Query Validation
 
 All Phase-2 queries from `phase2/Queries.sql` were re-executed on the merged schema to confirm backward compatibility. The queries reference CUSTOMER, ATTRACTION, TICKET, BOOKING, BOOKINGTICKET, PAYMENT, and REVIEW — all of which retained their original column structure (only new nullable columns were added).
 
-> 📌 **Note:** Screenshot confirming Phase-2 queries run successfully to be added here.
+> 📌 **Submission note:** Attach screenshot confirming successful execution of `phase3/Queries.sql`.
 
 ---
 
@@ -412,7 +431,7 @@ JOIN ATTRACTION      a  ON t.attraction_id = a.attraction_id;
 | Maya Barak | maya.barak4@example.com | Israel | 4 | 2026-03-13 | PAID | 140.00 | 140.00 | AquaPark | Water | Eilat | VIP | 2026-04-02 | 140.00 | 2 | 280.00 |
 | Omer Katz | omer.katz5@example.com | Israel | 5 | 2026-03-14 | PAID | 95.50 | 95.50 | FoodMarket | Food | Jerusalem | REGULAR | 2026-04-03 | 95.50 | 1 | 95.50 |
 
-> 📌 **Note:** Screenshot of `SELECT *` output to be added here.
+> 📌 **Submission note:** Attach screenshot of `SELECT * FROM vw_booking_summary LIMIT 10`.
 
 ---
 
@@ -442,7 +461,7 @@ ORDER BY total_revenue DESC;
 | Museum | 1 | 110.00 | 55.00 |
 | Tour | 1 | 79.90 | 79.90 |
 
-> 📌 **Note:** Screenshot of query output to be added here.
+> 📌 **Submission note:** Attach screenshot of this query output.
 
 ---
 
@@ -479,7 +498,7 @@ LIMIT 10;
 | Yael Cohen | yael.cohen2@example.com | 2 | 2026-03-11 | 55.00 | 55.00 | OK |
 | Noa Levi | noa.levi1@example.com | 1 | 2026-03-10 | 79.90 | 79.90 | OK |
 
-> 📌 **Note:** Screenshot of query output to be added here.
+> 📌 **Submission note:** Attach screenshot of this query output.
 
 ---
 
@@ -556,7 +575,7 @@ ORDER BY total_reports DESC
 LIMIT 10;
 ```
 
-> 📌 **Note:** Output will be available after the second team's REVIEWREPORT data is inserted. Screenshot to be added here.
+> 📌 **Submission note:** Attach screenshot of this query output after loading integrated report data.
 
 ---
 
@@ -590,11 +609,10 @@ LIMIT 10;
 | Yael Cohen | yael.cohen2@example.com | 1 | 4.30 | 0 | 0 |
 | Maya Barak | maya.barak4@example.com | 1 | 4.10 | 0 | 0 |
 
-> 📌 **Note:** Screenshot of query output to be added here.
+> 📌 **Submission note:** Attach screenshot of this query output.
 
 ---
 <img width="1520" height="797" alt="צילום מסך 2026-05-26 150055" src="https://github.com/user-attachments/assets/3490607c-8cfb-4961-b80d-a47cceec6130" />
 <img width="1544" height="811" alt="צילום מסך 2026-05-26 150026" src="https://github.com/user-attachments/assets/d528d05e-7ebb-4fc0-a37e-4d15c79290f1" />
 <img width="1516" height="785" alt="צילום מסך 2026-05-26 150200" src="https://github.com/user-attachments/assets/d6f57e27-9dc7-4201-98cc-cc8a450a9134" />
 <img width="1538" height="803" alt="צילום מסך 2026-05-26 150132" src="https://github.com/user-attachments/assets/e24542e7-b0eb-41cf-9c99-342e117ded9e" />
-
