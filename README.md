@@ -27,7 +27,7 @@
 - [Stage 3: Integration and Views](#stage-3-integration-and-views)
   - [Introduction](#introduction-2)
   - [DSD of the Acquired Department (System B)](#dsd-of-the-acquired-department-system-b)
-  - [ERD of System B — Reverse Engineering](#erd-of-system-b--reverse-engineering)
+  - [ERD of System B ](#erd-of-system-b)
   - [Combined ERD](#combined-erd)
   - [DSD After Integration](#dsd-after-integration)
   - [Integration Decisions](#integration-decisions)
@@ -1193,7 +1193,7 @@ We executed the integration following **Method A**:
 
 Below is the logical DSD of the **Review-Management** department, derived from the physical tables imported from their SQL backup:
 
-| Table Name | Attributes (Keys in **bold**, Foreign Keys in *italics*) |
+| Table Name | Attributes |
 | :--- | :--- |
 | **CUSTOMER** | **customer_id**, full_name, email, phone, register_date |
 | **ATTRACTION** | **attraction_id**, attraction_name, city, category, description |
@@ -1202,31 +1202,13 @@ Below is the logical DSD of the **Review-Management** department, derived from t
 | **REVIEWREACTION** | **reaction_id**, reaction_type, reaction_date, *review_id*, *customer_id* |
 | **REVIEWREPORT** | **report_id**, report_reason, report_description, report_date, admin_decision, decision_date, *customer_id*, *review_id* |
 
-#### DSD Logical Diagram:
+#### DSD Diagram:
 ![DSD of Acquired System B](./phase3/ERDandDSDfiles/reviewDSD.png)
 
 ---
 
-## ERD of System B — Reverse Engineering
+## ERD of System B 
 
-### Reverse Engineering Algorithm
-To construct a valid entity-relationship model from a physical database schema, we used a systematic reverse-engineering algorithm:
-
-1. **Entity Identification:** Identify every physical table that represents an independent object. If a table has a primary key that is not solely composed of foreign keys, it is mapped to a primary **Entity**.
-   - *Resulting Entities:* `CUSTOMER`, `ATTRACTION`, `TICKET`, `REVIEW`.
-2. **Key Mapping:** Identify the primary keys of the tables and map them directly as the primary unique identifiers (PK) of the corresponding entities.
-3. **Relationship Mapping:** Map foreign key (FK) constraints to structural **Relationships**:
-   - `TICKET.customer_id` → References `CUSTOMER.customer_id` (Relationship: Customer purchases Ticket).
-   - `TICKET.attraction_id` → References `ATTRACTION.attraction_id` (Relationship: Ticket gives access to Attraction).
-   - `REVIEW.ticket_id` → References `TICKET.ticket_id` (Relationship: Review evaluates Ticket).
-4. **Cardinality Resolution:** Evaluate foreign key columns and unique/index constraints to determine cardinality (1:1, 1:N, or N:M):
-   - A standard nullable/non-unique FK in table $X$ pointing to table $Y$ results in a **1:N** relationship (many rows of $X$ relate to one row of $Y$).
-   - *Example:* Many reviews can belong to a single ticket, so it is a **1:N** relationship from `TICKET` to `REVIEW`.
-5. **Associative/Weak Table Classification:** Look for tables representing actions, reports, or interactions that contain multiple foreign keys:
-   - `REVIEWREACTION` contains `review_id` and `customer_id`. It resolves a many-to-many relationship between `REVIEW` and `CUSTOMER` with additional descriptive attributes (`reaction_type`, `reaction_date`).
-   - `REVIEWREPORT` contains `review_id` and `customer_id`. It resolves a many-to-many relationship representing customer reporting behavior.
-   
-#### ERD Diagram of System B:
 ![ERD of Acquired System B](./phase3/ERDandDSDfiles/reviewERD.png)
 
 ---
@@ -1234,14 +1216,6 @@ To construct a valid entity-relationship model from a physical database schema, 
 ## Combined ERD
 
 The conceptual combined ERD brings together the attraction booking engine and the review-moderation ecosystem:
-
-```
-CUSTOMER ──< BOOKING >── BOOKINGTICKET >── TICKET >── ATTRACTION
-    │                                                      │
-    └──────────────────────────────────────────────── REVIEW ──< REVIEWREACTION >── CUSTOMER
-    │                                                        ──< REVIEWREPORT    >── CUSTOMER
-    └─── PAYMENT (1:1 with BOOKING)
-```
 
 ### Key Architectural Integration Decisions:
 - **Booking Layer Consolidation:** In System B, a `TICKET` was purchased directly by a `CUSTOMER` (`TICKET → CUSTOMER`). In our system (System A), we have a rich booking pipeline where a customer places a `BOOKING` containing multiple ticket items via `BOOKINGTICKET`. We consolidated this into our model, replacing their direct link with our transaction-rich booking layer.
@@ -1413,30 +1387,6 @@ ALTER TABLE ATTRACTION RENAME CONSTRAINT attraction1_pkey TO attraction_pkey;
 ALTER TABLE REVIEW     RENAME CONSTRAINT review1_pkey     TO review_pkey;
 ALTER TABLE TICKET     RENAME CONSTRAINT ticket1_pkey     TO ticket_pkey;
 ```
-
----
-
-## Verification
-
-### Row Counts Verification
-To confirm that all data from both systems was successfully migrated without loss or duplication, we ran the row count union query:
-
-| Table Name | Merged Row Count | Status |
-| :--- | :--- | :--- |
-| `CUSTOMER` | 20,400 | Successfully Migrated & Enriched |
-| `ATTRACTION` | 400 | Successfully Migrated |
-| `TICKET` | 1,400 | Successfully Migrated |
-| `PAYMENT` | 10,000 | Intact (Original system only) |
-| `BOOKING` | 10,000 | Intact (Original system only) |
-| `BOOKINGTICKET` | 10,000 | Intact (Original system only) |
-| `REVIEW` | 500 | Successfully Migrated & Realigned |
-| `REVIEWREACTION` | 120 | Successfully Imported & FK Linked |
-| `REVIEWREPORT` | 60 | Successfully Imported & FK Linked |
-
-### Phase 2 Query Validation
-All 8 analytical SELECT queries, 3 DELETE operations, and 3 UPDATE scripts from Phase 2 were tested against the unified schema. Since the original core table names, column structures, and constraint names were fully preserved, **all queries completed successfully with 100% backward compatibility.** 
-
-For queries utilizing `REVIEW`, we minorly updated them to include `is_deleted = FALSE` to respect the newly added soft-delete feature, and modified DELETE scripts to cascade cleanups on `REVIEWREACTION` and `REVIEWREPORT`.
 
 ---
 
