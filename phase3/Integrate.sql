@@ -223,7 +223,3 @@ SELECT 'REVIEWREACTION',       COUNT(*)          FROM REVIEWREACTION
 UNION ALL
 SELECT 'REVIEWREPORT',         COUNT(*)          FROM REVIEWREPORT;
 
--- ============================================================
--- STEP 6 – Run phase2/Queries.sql to confirm existing queries
---           still work on the merged schema.
--- ============================================================
